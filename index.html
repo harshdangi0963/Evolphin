@@ -9,35 +9,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@200..800&family=Inter:wght@300..700&display=swap" rel="stylesheet"/>
     <script>
-        // Shim process.env for browser compatibility in Vite/Vercel environments
         window.process = window.process || { env: {} };
         
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#1c7487",
-                        "primary-light": "#22a6c3",
-                        "accent-ai": "#6366f1",
-                        "workspace-bg": "#ffffff",
-                        "sidebar-bg": "#f8f9fa",
-                        "modal-bg": "#f3f4f6",
-                        "border-light": "#e5e7eb",
-                        "text-main": "#111827",
-                        "text-muted": "#6b7280"
+                        "primary": "#6366f1",
+                        "primary-dark": "#4f46e5",
+                        "accent-ai": "#a855f7",
+                        "workspace-bg": "#fafafa",
+                        "sidebar-bg": "#ffffff",
+                        "border-light": "rgba(0,0,0,0.06)",
+                        "text-main": "#0f172a",
+                        "text-muted": "#64748b"
                     },
                     fontFamily: {
                         "sans": ["Inter", "sans-serif"],
                         "display": ["Manrope", "sans-serif"],
                         "serif": ["Lora", "serif"]
                     },
-                    borderRadius: {
-                        "DEFAULT": "0.375rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "2xl": "1rem",
-                        "full": "9999px"
-                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
                 },
             },
         }
@@ -46,25 +40,24 @@
         @layer base {
             body {
                 @apply font-sans antialiased bg-workspace-bg text-text-main;
+                background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+                background-size: 24px 24px;
             }
         }
         .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
         }
         .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            @apply bg-gray-200 rounded-full;
+            @apply bg-slate-200 rounded-full hover:bg-slate-300;
         }
-        .document-text {
-            font-family: 'Lora', serif;
-            font-size: 1.125rem;
-            line-height: 1.8;
-            color: #1a1a1a;
+        .sidebar-transition {
+            transition: width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
     </style>
 <script type="importmap">
@@ -83,7 +76,6 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Script must be type module and relative for Vite to process correctly -->
     <script type="module" src="./index.tsx"></script>
 </body>
 </html>
