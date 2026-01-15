@@ -22,7 +22,7 @@ export const MOCK_DOCS: Document[] = [
 ];
 
 export const MOCK_ACTIVITIES: Activity[] = [
-  { id: 'a1', userId: 'u1', action: 'uploaded', target: 'Brand Styleguide v2.1', time: 'Today, 10:45 AM' },
-  { id: 'a2', userId: 'u2', action: 'updated', target: 'Marketing Budget Q4', time: 'Yesterday, 3:20 PM', comment: 'Adjusted the social media spend for November.' },
-  { id: 'a3', userId: 'u1', action: 'created', target: 'Brand Identity Refresh 2024', time: 'Oct 14, 2023' },
+  { id: 'a1', userId: 'u1', action: 'uploaded', target: 'Branding Guidelines', time: 'Today, 10:45 AM' },
+  { id: 'a2', userId: 'u2', action: 'updated', target: 'Product Roadmap 2024', time: 'Yesterday, 3:20 PM', comment: 'Adjusted the social media spend for November.' },
+  { id: 'a3', userId: 'u1', action: 'created', target: 'Engineering Onboarding', time: 'Oct 14, 2023' },
 ];

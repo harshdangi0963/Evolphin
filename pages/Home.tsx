@@ -1,9 +1,9 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleGenAI } from "@google/genai";
 import { MOCK_ACTIVITIES, MOCK_COLLECTIONS, MOCK_DOCS } from '../constants';
-import { Document } from '../types';
+import { Document, Activity } from '../types';
 
 interface Source {
   title: string;
@@ -115,6 +115,16 @@ const Home: React.FC = () => {
     else {
       if (!query.trim()) return;
       performAiAsk();
+    }
+  };
+
+  const handleActivityClick = (activity: Activity) => {
+    const doc = MOCK_DOCS.find(d => d.name === activity.target);
+    if (doc) {
+      navigate(`/documents/${doc.id}`);
+    } else {
+      // Fallback if the target name doesn't exactly match (though it should with our mock update)
+      navigate(`/documents/d1`);
     }
   };
 
@@ -263,7 +273,11 @@ const Home: React.FC = () => {
               </div>
               <div className="flex-1 overflow-y-auto custom-scrollbar p-6 pt-2 space-y-4">
                 {MOCK_ACTIVITIES.map((activity) => (
-                  <div key={activity.id} className="p-5 rounded-2xl bg-white border border-border-light hover:border-slate-300 transition-all cursor-pointer group shadow-sm">
+                  <div 
+                    key={activity.id} 
+                    onClick={() => handleActivityClick(activity)}
+                    className="p-5 rounded-2xl bg-white border border-border-light hover:border-slate-300 hover:shadow-md transition-all cursor-pointer group shadow-sm"
+                  >
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-[9px] font-bold text-text-muted uppercase bg-slate-100 px-2 py-0.5 rounded-full">{activity.time.split(',')[0]}</span>
                       <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-colors text-lg">{activity.action === 'uploaded' ? 'description' : 'draw'}</span>
