@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleGenAI } from "@google/genai";
 import { MOCK_ACTIVITIES, MOCK_COLLECTIONS, MOCK_DOCS } from '../constants';
 import { Document, Activity } from '../types';
 
@@ -22,7 +21,6 @@ const Home: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [aiResult, setAiResult] = useState<AIResult | null>(null);
   const [docResults, setDocResults] = useState<Document[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const [searchStep, setSearchStep] = useState<string>('');
   const [showFilters, setShowFilters] = useState(false);
   
@@ -33,10 +31,12 @@ const Home: React.FC = () => {
   const navigate = useNavigate();
 
   const steps = [
-    "Indexing document workspace...",
-    "Scanning metadata...",
+    "Initializing Nexus Neural Engine...",
+    "Scanning document workspace...",
+    "Cross-referencing metadata...",
     "Applying semantic filters...",
-    "Ranking relevance..."
+    "Synthesizing knowledge clusters...",
+    "Finalizing response..."
   ];
 
   const performDocSearch = () => {
@@ -56,57 +56,54 @@ const Home: React.FC = () => {
     }, 600);
   };
 
-  // Re-run search when filters change if we are already looking at results
   useEffect(() => {
     if (docResults !== null && searchMode === 'Search') {
       performDocSearch();
     }
   }, [filterType, filterOwner]);
 
+  /**
+   * Simulated AI Logic
+   * Provides a realistic "Think" experience without external API dependencies.
+   */
   const performAiAsk = async () => {
     setIsProcessing(true);
     setAiResult(null);
     setDocResults(null);
-    setError(null);
 
     let stepIdx = 0;
     const stepInterval = setInterval(() => {
       setSearchStep(steps[stepIdx % steps.length]);
       stepIdx++;
-    }, 800);
+    }, 600);
 
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
-      const docContext = MOCK_DOCS.map(d => `${d.name} (${d.type}) by ${d.owner}`).join(', ');
-      
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
-        contents: query,
-        config: {
-          systemInstruction: `You are Nexus AI. Your workspace contains the following documents: ${docContext}. 
-          Answer questions based strictly on these documents. Mention document names. 
-          Keep answers professional and structured.`,
-        },
-      });
+    // Simulate thinking time (3 seconds)
+    await new Promise(resolve => setTimeout(resolve, 3200));
 
-      const text = response.text || "I couldn't find a specific answer in your documents.";
-      const foundSources = MOCK_DOCS.filter(d => text.toLowerCase().includes(d.name.toLowerCase()))
-        .map(d => ({ title: d.name }));
+    // Dynamic mock response based on workspace context
+    const mentionDoc = MOCK_DOCS[Math.floor(Math.random() * MOCK_DOCS.length)];
+    const mockResponses = [
+      `Based on your workspace documents, specifically "${mentionDoc.name}", I've analyzed that your current project trajectory aligns with the Q4 goals. The primary bottlenecks identified involve cross-team dependency resolution.`,
+      `According to the data in "${mentionDoc.name}" authored by ${mentionDoc.owner}, the engineering standards require an update to support the new schema definitions. I recommend reviewing the latest PR for action items.`,
+      `I've synthesized the recent activity in your collections. It appears that most updates are focused on "${mentionDoc.name}". The overall sentiment of the documentation suggests a high state of readiness for the upcoming deployment.`
+    ];
 
-      setAiResult({
-        text,
-        sources: foundSources,
-        followUps: [`Summarize ${foundSources[0]?.title || 'the key points'}`, 'Who is the owner?', 'Extract action items']
-      });
+    const selectedText = mockResponses[Math.floor(Math.random() * mockResponses.length)];
+    const foundSources = MOCK_DOCS.filter(d => selectedText.includes(d.name)).map(d => ({ title: d.name }));
 
-      clearInterval(stepInterval);
-    } catch (err: any) {
-      setError(err.message || "AI failed to process.");
-      clearInterval(stepInterval);
-    } finally {
-      setIsProcessing(false);
-      setSearchStep('');
-    }
+    setAiResult({
+      text: selectedText,
+      sources: foundSources.length > 0 ? foundSources : [{ title: mentionDoc.name }],
+      followUps: [
+        `Summarize ${mentionDoc.name}`, 
+        'Show related documents', 
+        'Identify key stakeholders'
+      ]
+    });
+
+    clearInterval(stepInterval);
+    setIsProcessing(false);
+    setSearchStep('');
   };
 
   const handleSearch = (e: React.FormEvent) => {
@@ -120,12 +117,8 @@ const Home: React.FC = () => {
 
   const handleActivityClick = (activity: Activity) => {
     const doc = MOCK_DOCS.find(d => d.name === activity.target);
-    if (doc) {
-      navigate(`/documents/${doc.id}`);
-    } else {
-      // Fallback if the target name doesn't exactly match (though it should with our mock update)
-      navigate(`/documents/d1`);
-    }
+    if (doc) navigate(`/documents/${doc.id}`);
+    else navigate(`/documents/d1`);
   };
 
   const uniqueTypes = ['All', ...new Set(MOCK_DOCS.map(d => d.type))];
@@ -146,7 +139,7 @@ const Home: React.FC = () => {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2 text-[10px] text-emerald-600 font-bold uppercase tracking-wider">
              <span className="material-symbols-outlined text-[16px] fill-current">cloud_done</span>
-             Cloud Synchronized
+             Simulation Mode Active
           </div>
         </div>
       </header>
@@ -183,7 +176,7 @@ const Home: React.FC = () => {
             <form onSubmit={handleSearch} className={`w-full relative group rounded-3xl border-2 transition-all duration-500 bg-white shadow-2xl ${searchMode === 'AskAI' ? 'border-indigo-200 shadow-indigo-100/50' : 'border-slate-200 shadow-slate-100'}`}>
               <div className="absolute inset-y-0 left-6 flex items-center pointer-events-none">
                 {isProcessing ? (
-                  <div className={`size-5 border-2 ${searchMode === 'AskAI' ? 'border-accent-ai' : 'border-primary'} border-t-transparent rounded-full animate-spin`}></div>
+                  <div className={`size-5 border-2 ${searchMode === 'AskAI' ? 'border-accent-ai' : 'border-t-transparent animate-spin'}`}></div>
                 ) : (
                   <span className={`material-symbols-outlined text-2xl ${searchMode === 'AskAI' ? 'text-accent-ai' : 'text-slate-400'}`}>
                     {searchMode === 'AskAI' ? 'psychology' : 'search'}
@@ -193,7 +186,7 @@ const Home: React.FC = () => {
               <input 
                 autoFocus 
                 className="w-full h-16 bg-transparent border-none rounded-3xl pl-16 pr-44 text-lg font-medium text-text-main placeholder:text-slate-300 focus:ring-0" 
-                placeholder={searchMode === 'AskAI' ? "Consult the knowledge base..." : "Find any document..."}
+                placeholder={searchMode === 'AskAI' ? "Consult your knowledge base..." : "Find any document..."}
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -220,7 +213,6 @@ const Home: React.FC = () => {
               </div>
             </form>
 
-            {/* Compact Filter Ribbon */}
             {showFilters && searchMode === 'Search' && (
               <div className="w-full flex items-center justify-center gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
                 <div className="flex items-center gap-2 p-1 bg-white/50 backdrop-blur-md rounded-xl border border-border-light shadow-sm">
@@ -262,7 +254,7 @@ const Home: React.FC = () => {
         {/* Intelligence Shelf */}
         {!isFocusMode && (
           <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in slide-in-from-bottom-6 duration-700">
-            {/* Left Column: Recent Activity Intelligence */}
+            {/* Left Column: Recent Activity */}
             <div className="flex flex-col min-h-0 bg-slate-50/50 rounded-[2rem] border border-border-light overflow-hidden backdrop-blur-sm">
               <div className="p-6 pb-4 flex items-center justify-between shrink-0 bg-white/40 backdrop-blur-md">
                 <h3 className="text-[10px] font-extrabold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
@@ -289,7 +281,7 @@ const Home: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column: Collection Catalog */}
+            {/* Right Column: Collections */}
             <div className="flex flex-col min-h-0 bg-slate-50/50 rounded-[2rem] border border-border-light overflow-hidden backdrop-blur-sm">
               <div className="p-6 pb-4 flex items-center justify-between shrink-0 bg-white/40 backdrop-blur-md">
                 <h3 className="text-[10px] font-extrabold text-text-muted uppercase tracking-[0.2em] flex items-center gap-2">
@@ -330,26 +322,30 @@ const Home: React.FC = () => {
         {isFocusMode && (
           <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 animate-in fade-in zoom-in-95 duration-500">
             {isProcessing ? (
-              <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                <div className={`size-12 rounded-2xl flex items-center justify-center border animate-pulse ${searchMode === 'AskAI' ? 'bg-indigo-50 border-indigo-100' : 'bg-slate-50 border-slate-200'}`}>
-                  <span className={`material-symbols-outlined text-2xl ${searchMode === 'AskAI' ? 'text-accent-ai' : 'text-primary'}`}>
+              <div className="flex flex-col items-center justify-center py-20 space-y-6">
+                <div className={`size-16 rounded-3xl flex items-center justify-center border animate-pulse shadow-xl ${searchMode === 'AskAI' ? 'bg-indigo-50 border-indigo-100' : 'bg-slate-50 border-slate-200'}`}>
+                  <span className={`material-symbols-outlined text-3xl ${searchMode === 'AskAI' ? 'text-accent-ai' : 'text-primary'}`}>
                     {searchMode === 'AskAI' ? 'neurology' : 'manage_search'}
                   </span>
                 </div>
-                <p className="text-[10px] font-extrabold text-text-muted uppercase tracking-[0.2em]">{searchStep || 'Accessing Knowledge...'}</p>
+                <div className="text-center">
+                  <p className="text-[11px] font-extrabold text-text-muted uppercase tracking-[0.25em] mb-2">{searchStep || 'Accessing Knowledge...'}</p>
+                  <div className="w-48 h-1 bg-slate-100 rounded-full overflow-hidden mx-auto">
+                    <div className={`h-full animate-[progress_1.5s_infinite_linear] ${searchMode === 'AskAI' ? 'bg-accent-ai' : 'bg-primary'}`} style={{ width: '40%' }}></div>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="space-y-6 pb-10">
-                {/* Search Results */}
+                {/* Document Results */}
                 {docResults && (
                   <div className="grid grid-cols-1 gap-3">
                     <div className="flex items-center justify-between px-2 mb-2">
                        <p className="text-[10px] font-extrabold text-text-muted uppercase tracking-[0.2em]">Found {docResults.length} matches</p>
-                       {hasActiveFilters && <span className="text-[9px] font-bold text-accent-ai uppercase">Filters Applied</span>}
                     </div>
                     {docResults.length === 0 ? (
                       <div className="py-20 text-center text-slate-400 border-2 border-dashed border-slate-100 rounded-3xl">
-                        <p className="text-sm font-bold">No matches found with current parameters.</p>
+                        <p className="text-sm font-bold">No results found in your workspace.</p>
                       </div>
                     ) : (
                       docResults.map(doc => (
@@ -371,7 +367,7 @@ const Home: React.FC = () => {
                   </div>
                 )}
 
-                {/* AI Output */}
+                {/* AI Output (Mocked) */}
                 {aiResult && (
                   <div className="space-y-8">
                     <div className="p-10 rounded-[2.5rem] bg-white border border-indigo-100 shadow-2xl relative overflow-hidden">
@@ -379,13 +375,16 @@ const Home: React.FC = () => {
                         <div className="size-10 rounded-xl bg-accent-ai text-white flex items-center justify-center shadow-lg shadow-indigo-200">
                           <span className="material-symbols-outlined text-xl">auto_awesome</span>
                         </div>
-                        <h2 className="text-base font-extrabold text-text-main tracking-tight">AI Synthesis</h2>
+                        <div>
+                          <h2 className="text-base font-extrabold text-text-main tracking-tight leading-none">AI Synthesis</h2>
+                          <p className="text-[9px] text-accent-ai font-bold uppercase tracking-wider mt-1.5">Offline Simulation</p>
+                        </div>
                       </div>
                       <p className="text-lg text-text-main leading-relaxed font-medium mb-10">{aiResult.text}</p>
                       {aiResult.sources.length > 0 && (
                         <div className="flex flex-wrap gap-2 pt-6 border-t border-slate-100">
                           {aiResult.sources.map((s, i) => (
-                            <button key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-accent-ai">
+                            <button key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-100 text-[10px] font-bold text-accent-ai hover:bg-indigo-100 transition-colors">
                               <span className="material-symbols-outlined text-[14px]">description</span>
                               {s.title}
                             </button>
@@ -395,7 +394,7 @@ const Home: React.FC = () => {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {aiResult.followUps.map((f, i) => (
-                        <button key={i} onClick={() => setQuery(f)} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left hover:border-accent-ai/30 hover:bg-white transition-all group">
+                        <button key={i} onClick={() => { setQuery(f); performAiAsk(); }} className="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left hover:border-accent-ai/30 hover:bg-white transition-all group">
                           <p className="text-[11px] font-bold text-text-main leading-tight mb-2">{f}</p>
                           <span className="material-symbols-outlined text-sm text-slate-300 group-hover:text-accent-ai transition-colors">north_east</span>
                         </button>
@@ -408,7 +407,7 @@ const Home: React.FC = () => {
                   onClick={() => { setAiResult(null); setDocResults(null); setQuery(''); setFilterType('All'); setFilterOwner('All'); }} 
                   className="w-full py-4 text-[10px] font-bold text-text-muted uppercase tracking-[0.2em] border-2 border-dashed border-slate-200 rounded-3xl hover:border-slate-400 hover:text-text-main transition-all"
                 >
-                  Exit Focus Mode
+                  Clear & Exit Focus Mode
                 </button>
               </div>
             )}
@@ -418,7 +417,7 @@ const Home: React.FC = () => {
 
       <style>{`
         @keyframes progress {
-          0% { transform: translateX(-100%); }
+          0% { transform: translateX(-150%); }
           100% { transform: translateX(250%); }
         }
       `}</style>
