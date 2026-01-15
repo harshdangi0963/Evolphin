@@ -22,76 +22,78 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       <aside 
         onMouseEnter={() => setIsCollapsed(false)}
         onMouseLeave={() => setIsCollapsed(true)}
-        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-border-light flex flex-col transition-all duration-300 transform lg:relative lg:translate-x-0 
+        className={`fixed inset-y-0 left-0 z-50 bg-white border-r border-border-light flex flex-col transition-[width] duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] transform lg:relative lg:translate-x-0 overflow-hidden
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'} 
-          ${isCollapsed ? 'lg:w-20' : 'lg:w-64'}`}
+          ${isCollapsed ? 'lg:w-[72px]' : 'lg:w-64'}`}
       >
-        <div className={`p-6 flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} transition-all`}>
-          <div className="size-8 rounded-lg bg-text-main flex items-center justify-center text-white shadow-sm shrink-0">
-            <span className="material-symbols-outlined text-lg">terminal</span>
+        {/* Logo Section */}
+        <div className="flex items-center h-20 px-[18px] shrink-0 overflow-hidden">
+          <div className="size-9 rounded-xl bg-text-main flex items-center justify-center text-white shadow-sm shrink-0">
+            <span className="material-symbols-outlined text-xl">terminal</span>
           </div>
-          {!isCollapsed && (
-            <div className="overflow-hidden whitespace-nowrap">
-              <h1 className="text-sm font-extrabold leading-none text-text-main uppercase tracking-tighter">Nexus KM</h1>
-              <p className="text-[10px] text-text-muted uppercase tracking-wider mt-1 font-bold">Workspace</p>
-            </div>
-          )}
+          <div className={`ml-4 transition-all duration-300 ease-out ${isCollapsed ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+            <h1 className="text-sm font-extrabold leading-none text-text-main uppercase tracking-tighter whitespace-nowrap">Nexus KM</h1>
+            <p className="text-[10px] text-text-muted uppercase tracking-wider mt-1 font-bold whitespace-nowrap">Workspace</p>
+          </div>
         </div>
 
-        <nav className="flex-1 px-4 space-y-2 mt-4 overflow-x-hidden">
-          <div className={`px-3 mb-2 transition-opacity duration-200 ${isCollapsed ? 'opacity-0 h-0 pointer-events-none' : 'opacity-100'}`}>
-            <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider whitespace-nowrap">Main Menu</span>
-          </div>
+        {/* Navigation */}
+        <nav className="flex-1 px-3 space-y-1 mt-2 overflow-x-hidden overflow-y-auto custom-scrollbar">
           {navItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
-              title={isCollapsed ? item.name : undefined}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative ${
+              className={`flex items-center h-11 px-[10px] rounded-xl transition-all duration-200 group relative overflow-hidden ${
                 isActive(item.path)
                   ? 'bg-slate-50 text-text-main border border-border-light shadow-sm'
-                  : 'text-text-muted hover:bg-slate-50 hover:text-text-main'
-              } ${isCollapsed ? 'justify-center' : ''}`}
+                  : 'text-text-muted hover:bg-slate-50/80 hover:text-text-main border border-transparent'
+              }`}
             >
-              <span className={`material-symbols-outlined shrink-0 text-[22px] ${isActive(item.path) ? 'text-primary' : 'group-hover:text-primary'}`}>
+              <span className={`material-symbols-outlined shrink-0 text-[24px] transition-colors ${isActive(item.path) ? 'text-primary' : 'group-hover:text-primary'}`}>
                 {item.icon}
               </span>
-              {!isCollapsed && (
-                <span className={`text-sm whitespace-nowrap overflow-hidden transition-all ${isActive(item.path) ? 'font-bold' : 'font-medium'}`}>
-                  {item.name}
-                </span>
+              <span className={`ml-4 text-sm whitespace-nowrap transition-all duration-300 ease-out ${isCollapsed ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'} ${isActive(item.path) ? 'font-bold' : 'font-medium'}`}>
+                {item.name}
+              </span>
+              {isCollapsed && (
+                 <div className="absolute left-full ml-4 px-2 py-1 bg-slate-900 text-white text-[10px] font-bold rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                    {item.name}
+                 </div>
               )}
             </Link>
           ))}
-          <div className={`h-px bg-border-light my-4 mx-2 ${isCollapsed ? 'mx-0' : ''}`}></div>
-          <button className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-text-muted hover:bg-slate-50 hover:text-text-main transition-colors group ${isCollapsed ? 'justify-center' : ''}`}>
-            <span className="material-symbols-outlined shrink-0 text-[22px] group-hover:text-primary">settings</span>
-            {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap overflow-hidden">Settings</span>}
+          
+          <div className="h-px bg-border-light my-4 mx-2"></div>
+          
+          <button className="w-full flex items-center h-11 px-[10px] rounded-xl text-text-muted hover:bg-slate-50/80 hover:text-text-main transition-all group overflow-hidden">
+            <span className="material-symbols-outlined shrink-0 text-[24px] group-hover:text-primary">settings</span>
+            <span className={`ml-4 text-sm font-medium whitespace-nowrap transition-all duration-300 ease-out ${isCollapsed ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              Settings
+            </span>
           </button>
         </nav>
 
-        <div className="p-4 border-t border-border-light mt-auto">
-          <div className={`flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-slate-50 transition-all cursor-pointer ${isCollapsed ? 'justify-center' : ''}`}>
+        {/* User Profile */}
+        <div className="p-3 border-t border-border-light mt-auto">
+          <div className="flex items-center h-14 px-1 rounded-xl hover:bg-slate-50 transition-all cursor-pointer group overflow-hidden">
             <div className="size-10 rounded-full border border-border-light p-0.5 overflow-hidden shrink-0 shadow-sm">
               <div 
                 className="w-full h-full rounded-full bg-cover bg-center" 
                 style={{ backgroundImage: `url('https://picsum.photos/seed/user1/64/64')` }}
               ></div>
             </div>
-            {!isCollapsed && (
-              <>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold truncate text-text-main">Alex Rivera</p>
-                  <p className="text-[10px] text-text-muted uppercase tracking-tight">Pro Plan</p>
-                </div>
-                <span className="material-symbols-outlined text-text-muted text-lg">unfold_more</span>
-              </>
-            )}
+            <div className={`ml-3 flex-1 transition-all duration-300 ease-out flex items-center justify-between overflow-hidden ${isCollapsed ? 'opacity-0 -translate-x-4 pointer-events-none' : 'opacity-100 translate-x-0'}`}>
+              <div className="truncate pr-2">
+                <p className="text-xs font-bold truncate text-text-main">Alex Rivera</p>
+                <p className="text-[10px] text-text-muted uppercase tracking-tight">Pro Plan</p>
+              </div>
+              <span className="material-symbols-outlined text-text-muted text-lg shrink-0">unfold_more</span>
+            </div>
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 h-full relative overflow-y-auto custom-scrollbar">
         {/* Mobile Header */}
         <div className="lg:hidden h-14 border-b border-border-light flex items-center justify-between px-6 bg-white/80 backdrop-blur-md sticky top-0 z-40">
@@ -104,10 +106,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         {children}
       </main>
 
-      {/* Sidebar Backdrop */}
+      {/* Mobile Backdrop */}
       {isMobileOpen && (
         <div 
-          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden animate-in fade-in duration-300"
           onClick={() => setIsMobileOpen(false)}
         ></div>
       )}
