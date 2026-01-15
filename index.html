@@ -9,6 +9,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@200..800&family=Inter:wght@300..700&display=swap" rel="stylesheet"/>
     <script>
+        // Shim process.env for browser compatibility in Vite/Vercel environments
+        window.process = window.process || { env: {} };
+        
         tailwind.config = {
             theme: {
                 extend: {
@@ -68,17 +71,19 @@
 {
   "imports": {
     "react-router-dom": "https://esm.sh/react-router-dom@^7.12.0",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "react/": "https://esm.sh/react@^19.2.3/",
+    "react-dom/client": "https://esm.sh/react-dom@^19.2.3/client",
+    "react-dom": "https://esm.sh/react-dom@^19.2.3",
     "react": "https://esm.sh/react@^19.2.3",
-    "@google/genai": "https://esm.sh/@google/genai@^1.36.0"
+    "@google/genai": "https://esm.sh/@google/genai@^1.36.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
 </head>
 <body>
     <div id="root"></div>
-    <!-- Entry point for the application -->
-    <script type="module" src="/index.tsx"></script>
+    <!-- Script must be type module and relative for Vite to process correctly -->
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>
