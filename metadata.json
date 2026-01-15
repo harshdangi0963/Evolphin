@@ -1,0 +1,8 @@
+{
+  "name": "Nexus KM",
+  "description": "A high-performance knowledge management workspace with AI-powered search, contextual assistant, and collaborative version control.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
