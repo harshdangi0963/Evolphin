@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MOCK_DOCS } from '../constants';
@@ -39,67 +39,133 @@ const SearchInput: React.FC<SearchInputProps> = ({
   handleSearchSubmit,
   stickyBottom = false 
 }) => {
-  const smoothSpring = {
+  const isAi = searchMode === 'AskAI';
+  
+  // Refined "Human-Like" Typing Effect Logic
+  const [displayText, setDisplayText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(100);
+  const [showCursor, setShowCursor] = useState(true);
+
+  const searchSuggestions = useMemo(() => [
+    "Find the 2024 Roadmap",
+    "Search 'Engineering' docs",
+    "Look for Alex Rivera's files",
+    "Find SQL schema definitions",
+    "Search for PDF assets"
+  ], []);
+
+  const aiSuggestions = useMemo(() => [
+    "Summarize the ethics document",
+    "Explain 'accountability gaps'",
+    "What are the Q4 risks?",
+    "Synthesize recent uploads",
+    "Check for naming conflicts"
+  ], []);
+
+  const suggestions = isAi ? aiSuggestions : searchSuggestions;
+
+  // Handle Typing
+  useEffect(() => {
+    const handleType = () => {
+      const i = loopNum % suggestions.length;
+      const fullText = suggestions[i];
+
+      if (isDeleting) {
+        setDisplayText(prev => prev.substring(0, prev.length - 1));
+        setTypingSpeed(35); // Faster deleting
+      } else {
+        setDisplayText(fullText.substring(0, displayText.length + 1));
+        // Add random jitter for human feel (60ms - 120ms)
+        setTypingSpeed(60 + Math.random() * 60);
+      }
+
+      // Transition Logic
+      if (!isDeleting && displayText === fullText) {
+        setTypingSpeed(2000); // Wait at the end of phrase
+        setIsDeleting(true);
+      } else if (isDeleting && displayText === '') {
+        setIsDeleting(false);
+        setLoopNum(prev => prev + 1);
+        setTypingSpeed(500); // Brief pause before next phrase
+      }
+    };
+
+    const timer = setTimeout(handleType, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [displayText, isDeleting, loopNum, suggestions, typingSpeed]);
+
+  // Cursor Blinking Logic (only blinks when not typing)
+  useEffect(() => {
+    const blinkInterval = setInterval(() => {
+      setShowCursor(prev => !prev);
+    }, 500);
+    return () => clearInterval(blinkInterval);
+  }, []);
+
+  const springConfig = {
     type: 'spring',
-    stiffness: 260,
-    damping: 30,
+    stiffness: 400,
+    damping: 40,
     mass: 1
   };
-
-  const isAi = searchMode === 'AskAI';
 
   return (
     <motion.div 
       layout
-      className={`w-full max-w-4xl mx-auto px-6 ${stickyBottom ? 'fixed bottom-8 left-1/2 -translate-x-1/2 z-50' : 'relative mt-2'}`}
+      layoutId="search-console-container"
+      transition={springConfig}
+      className={`w-full max-w-4xl px-6 mx-auto ${stickyBottom ? 'absolute bottom-8 inset-x-0 z-50' : 'relative mt-2'}`}
     >
       <motion.form 
         layout
+        layoutId="search-console-form"
         onSubmit={handleSearchSubmit}
         animate={{
           boxShadow: isAi 
-            ? '0 40px 80px -15px rgba(79, 70, 229, 0.25), 0 0 40px -10px rgba(79, 70, 229, 0.3)'
-            : '0 40px 80px -15px rgba(0,0,0,0.12), 0 0 30px -10px rgba(0,0,0,0.08)',
-          borderColor: isAi ? '#4f46e5' : '#cbd5e1', 
-          scale: isProcessing ? 0.995 : 1
+            ? '0 30px 60px -15px rgba(79, 70, 229, 0.25)'
+            : '0 30px 60px -15px rgba(0,0,0,0.1)',
+          borderColor: isAi ? '#4f46e5' : '#cbd5e1',
+          opacity: 1
         }}
-        className="relative flex items-center p-2 rounded-[28px] bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 shadow-2xl transition-all duration-500"
+        className="relative flex items-center p-2 rounded-[28px] bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 transition-colors duration-500"
       >
         <BorderBeam 
-          size={isAi ? 400 : 280} 
-          duration={isAi ? 8 : 12} 
+          size={isAi ? 400 : 250} 
+          duration={isAi ? 8 : 15} 
           colorFrom={isAi ? "#4f46e5" : "#94a3b8"} 
           borderRadius={28}
           borderWidth={isAi ? 2 : 1}
-          className={isAi ? "opacity-100" : "opacity-40"}
+          className={isAi ? "opacity-100" : "opacity-30"}
         />
         
-        <div className="flex bg-slate-100 dark:bg-slate-800/80 rounded-[20px] p-1.5 shrink-0 w-[180px] relative h-14 items-center border border-slate-200 dark:border-white/5">
+        <div className="flex bg-slate-100 dark:bg-slate-800/80 rounded-[20px] p-1.5 shrink-0 w-[180px] relative h-14 items-center border border-slate-200 dark:border-white/5 font-sans">
           <motion.div 
             animate={{ x: searchMode === 'Search' ? 0 : 84 }}
-            transition={smoothSpring}
+            transition={springConfig}
             className="absolute top-1.5 bottom-1.5 w-[84px] bg-white dark:bg-slate-950 rounded-[14px] shadow-sm z-0 border border-slate-200 dark:border-white/10"
           />
           <button 
             type="button"
             onClick={() => setSearchMode('Search')}
-            className={`relative z-10 flex-1 h-full text-[11px] font-bold uppercase tracking-widest transition-colors duration-500 ${searchMode === 'Search' ? 'text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'}`}
+            className={`relative z-10 flex-1 h-full text-[11px] font-bold uppercase tracking-widest transition-colors duration-300 ${searchMode === 'Search' ? 'text-slate-900 dark:text-white' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
           >
             Search
           </button>
           <button 
             type="button"
             onClick={() => setSearchMode('AskAI')}
-            className={`relative z-10 flex-1 h-full text-[11px] font-bold uppercase tracking-widest transition-colors duration-500 ${searchMode === 'AskAI' ? 'text-primary' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'}`}
+            className={`relative z-10 flex-1 h-full text-[11px] font-bold uppercase tracking-widest transition-colors duration-300 ${searchMode === 'AskAI' ? 'text-primary' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-300'}`}
           >
             Ask AI
           </button>
         </div>
 
-        <div className="flex-1 flex items-center h-14 ml-2">
+        <div className="flex-1 flex items-center h-14 ml-2 font-sans relative overflow-hidden">
           <input 
-            className="flex-1 bg-transparent border-none px-4 text-[16px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-0 h-full"
-            placeholder={isAi ? "Describe your intent..." : "Find anything in your workspace..."}
+            className="flex-1 bg-transparent border-none px-4 text-[16px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-0 h-full relative z-10"
+            placeholder={!query ? `${displayText}${showCursor ? '|' : ' '}` : ''}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
@@ -110,7 +176,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           whileTap={{ scale: 0.98 }}
           whileHover={{ scale: 1.01 }}
           type="submit"
-          className={`h-14 px-8 rounded-[20px] flex items-center gap-3 transition-all disabled:opacity-30 disabled:pointer-events-none group shrink-0 ${
+          className={`h-14 px-8 rounded-[20px] flex items-center gap-3 transition-all disabled:opacity-30 disabled:pointer-events-none group shrink-0 font-sans ${
             isAi 
             ? 'bg-primary shadow-xl hover:bg-slate-950 dark:hover:bg-slate-700' 
             : 'bg-slate-900 dark:bg-slate-800 hover:bg-primary dark:hover:bg-primary shadow-lg'
@@ -118,12 +184,12 @@ const SearchInput: React.FC<SearchInputProps> = ({
           disabled={!query.trim() && !isProcessing}
         >
           <span className="text-white text-[11px] font-bold uppercase tracking-[0.2em]">
-            {isProcessing ? 'Processing' : (searchMode === 'Search' ? 'Execute' : 'Synthesize')}
+            {isProcessing ? 'Thinking' : (searchMode === 'Search' ? 'Execute' : 'Synthesize')}
           </span>
           {!isProcessing && (
             <motion.span 
-              animate={isAi ? { rotate: [0, 15, -15, 0] } : {}}
-              transition={{ repeat: Infinity, duration: 2.5 }}
+              animate={isAi ? { rotate: [0, 10, -10, 0], scale: [1, 1.1, 1] } : {}}
+              transition={{ repeat: Infinity, duration: 3 }}
               className="material-symbols-outlined text-[20px] text-white/80 group-hover:text-white transition-colors"
             >
               {searchMode === 'Search' ? 'bolt' : 'auto_awesome'}
@@ -150,15 +216,9 @@ const Home: React.FC = () => {
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
-      const timeStr = now.toLocaleTimeString('en-US', { 
-        hour12: false, 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit' 
-      });
+      const timeStr = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
       setCurrentTime(timeStr);
     };
-
     updateTime();
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
@@ -216,12 +276,6 @@ const Home: React.FC = () => {
     { name: 'SQL', icon: 'database' }
   ];
 
-  const filterSpring = {
-    type: 'spring',
-    stiffness: 300,
-    damping: 35
-  };
-
   const handleSetSearchMode = (mode: 'Search' | 'AskAI') => {
     setSearchMode(mode);
     setDocResults(null);
@@ -229,47 +283,46 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full h-full relative bg-workspace-bg dark:bg-slate-950 transition-colors duration-500">
+    <div className="flex-1 flex flex-col w-full h-full relative bg-workspace-bg dark:bg-slate-950 overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <motion.div 
-          animate={{ opacity: isFocusMode ? 0.2 : 0.6 }}
-          className="absolute inset-0 fine-dotted-mesh text-slate-400 dark:text-slate-600 hero-mask"
+          animate={{ opacity: isFocusMode ? 0.2 : 0.5 }}
+          className="absolute inset-0 fine-dotted-mesh text-slate-400/80 dark:text-slate-800/60 hero-mask"
         />
         
         <motion.div 
-          animate={{ opacity: isFocusMode ? 0.15 : 0.5 }}
-          className="absolute inset-0 hero-mask"
+          animate={{ opacity: isFocusMode ? 0.1 : 0.4 }}
+          className="absolute inset-0 hero-mask bg-gradient-to-b from-primary/5 to-transparent"
         />
         <motion.div 
           animate={{ 
             top: isFocusMode ? '0%' : '15%',
-            opacity: isFocusMode ? 0.2 : 0.8
+            opacity: isFocusMode ? 0.1 : 0.6
           }}
-          className="absolute left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-primary/5 blur-[140px] rounded-full dark:opacity-10"
+          className="absolute left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-primary/10 blur-[150px] rounded-full"
         />
       </div>
 
-      <div className="flex-1 flex flex-col w-full max-w-5xl mx-auto relative z-10 px-6">
-        <div className={`flex-1 flex flex-col transition-all duration-700 ${isConversationActive ? 'pt-8' : 'pt-24'}`}>
+      <div className="flex-1 flex flex-col w-full max-w-5xl mx-auto relative z-10 px-6 overflow-hidden">
+        <motion.div 
+          layout
+          className={`flex-1 flex flex-col relative ${isConversationActive ? 'pt-8' : 'pt-24'}`}
+        >
           <AnimatePresence mode="wait">
             {!isFocusMode && (
               <motion.div 
                 key="hero-section"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                exit={{ opacity: 0, y: -30, scale: 0.98 }}
                 transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                 className="text-center mb-20 relative"
               >
-                {/* Hero Headline Refinement */}
                 <h1 className="text-[64px] lg:text-[104px] font-extrabold tracking-[-0.04em] font-display leading-[0.85] select-none">
                   <span className="text-shimmer">Search </span>
                   <span className="relative inline-block group cursor-default">
-                    <span className="text-slate-300 dark:text-slate-800 transition-all duration-700 group-hover:text-primary group-hover:blur-0 blur-[2px] dark:group-hover:text-white">without</span>
-                    <motion.div 
-                      className="absolute -bottom-1 left-0 right-0 h-1 bg-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      layoutId="hover-glow"
-                    />
+                    <span className="text-slate-300 dark:text-slate-800 transition-all duration-700 group-hover:text-primary group-hover:blur-0 blur-[3px] dark:group-hover:text-white">without</span>
+                    <motion.div className="absolute -bottom-1 left-0 right-0 h-1 bg-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                   </span>
                   <br/>
                   <span className="text-shimmer relative inline-block mt-3">
@@ -282,12 +335,12 @@ const Home: React.FC = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 1 }}
-                  className="mt-10 flex flex-col items-center"
+                  className="mt-10 flex flex-col items-center font-sans"
                 >
-                  <p className="text-[12px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[0.5em] max-w-lg mx-auto leading-relaxed">
-                    Intelligence Mesh <span className="text-slate-300 dark:text-slate-800">/</span> v4.0.22
+                  <p className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-[0.5em] max-w-lg mx-auto leading-relaxed">
+                    Intelligence Mesh <span className="text-slate-300 dark:text-slate-700">/</span> v4.0.22
                   </p>
-                  <div className="h-8 w-px bg-gradient-to-b from-primary/40 to-transparent mt-6" />
+                  <div className="h-10 w-px bg-gradient-to-b from-primary/30 to-transparent mt-6" />
                 </motion.div>
               </motion.div>
             )}
@@ -306,12 +359,13 @@ const Home: React.FC = () => {
 
           {searchMode === 'Search' && !isConversationActive && (
             <motion.div 
+              layout
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ delay: 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
               className="flex justify-center mt-10"
             >
-              <div className="flex bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-1 rounded-[18px] border border-slate-200 dark:border-white/5 shadow-sm relative overflow-hidden scale-95">
+              <div className="flex bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-1 rounded-[18px] border border-slate-200 dark:border-white/5 shadow-sm relative overflow-hidden scale-95 font-sans">
                 {filters.map((f) => (
                   <button
                     key={f.name}
@@ -319,20 +373,20 @@ const Home: React.FC = () => {
                       setActiveFilter(f.name);
                       if (query) performDocSearch();
                     }}
-                    className={`relative px-4 py-2 rounded-[14px] flex items-center gap-2 transition-all group z-10`}
+                    className={`relative px-5 py-2.5 rounded-[14px] flex items-center gap-2 transition-all group z-10`}
                   >
                     {activeFilter === f.name && (
                       <motion.div
                         layoutId="filter-active-pill"
-                        transition={filterSpring}
-                        className="absolute inset-0 bg-primary/10 dark:bg-primary/20 shadow-[0_0_0_1px_rgba(79,70,229,0.2)] rounded-[14px]"
+                        transition={{ type: 'spring', stiffness: 500, damping: 50 }}
+                        className="absolute inset-0 bg-primary/10 dark:bg-primary/20 shadow-[0_0_0_1px_rgba(79,70,229,0.15)] rounded-[14px]"
                       />
                     )}
                     
-                    <span className={`material-symbols-outlined text-[18px] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200'}`}>
+                    <span className={`material-symbols-outlined text-[18px] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary font-bold' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200'}`}>
                       {f.icon}
                     </span>
-                    <span className={`text-[10px] font-bold uppercase tracking-[0.15em] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-500 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-slate-200'}`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-[0.15em] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-500 group-hover:text-slate-900 dark:group-hover:text-slate-200'}`}>
                       {f.name}
                     </span>
                   </button>
@@ -341,11 +395,11 @@ const Home: React.FC = () => {
             </motion.div>
           )}
 
-          <div className={`mt-12 space-y-6 overflow-y-auto custom-scrollbar flex-1 px-2 ${isConversationActive ? 'pb-36' : 'pb-16'}`}>
+          <div className={`mt-12 space-y-6 overflow-y-auto custom-scrollbar flex-1 px-2 ${isConversationActive ? 'pb-40' : 'pb-24'} font-sans`}>
             {searchMode === 'AskAI' && chatHistory.map((msg, i) => (
               <motion.div 
                 key={msg.id}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.8 }}
                 className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -445,31 +499,32 @@ const Home: React.FC = () => {
             )}
             <div ref={chatEndRef} />
           </div>
-        </div>
-      </div>
 
-      <AnimatePresence>
-        {isConversationActive && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-workspace-bg dark:from-slate-950 via-workspace-bg/95 dark:via-slate-950/95 to-transparent z-50 pointer-events-none"
-          >
-            <div className="pointer-events-auto">
-               <SearchInput 
-                  searchMode={searchMode}
-                  setSearchMode={handleSetSearchMode}
-                  query={query}
-                  setQuery={setQuery}
-                  isProcessing={isProcessing}
-                  handleSearchSubmit={handleSearchSubmit}
-                  stickyBottom 
-                />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <AnimatePresence>
+            {isConversationActive && (
+              <motion.div
+                key="sticky-console"
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 100, opacity: 0 }}
+                className="absolute bottom-0 inset-x-0 p-8 pt-20 bg-gradient-to-t from-workspace-bg dark:from-slate-950 via-workspace-bg/95 dark:via-slate-950/95 to-transparent z-50 pointer-events-none"
+              >
+                <div className="pointer-events-auto">
+                   <SearchInput 
+                      searchMode={searchMode}
+                      setSearchMode={handleSetSearchMode}
+                      query={query}
+                      setQuery={setQuery}
+                      isProcessing={isProcessing}
+                      handleSearchSubmit={handleSearchSubmit}
+                      stickyBottom 
+                    />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </div>
 
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
