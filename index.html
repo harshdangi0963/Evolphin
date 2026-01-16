@@ -21,10 +21,10 @@
                         "accent-ai": "#a855f7",
                         "workspace-bg": "#ffffff",
                         "sidebar-bg": "#020617",
-                        "border-light": "rgba(0,0,0,0.06)",
-                        "border-dark": "rgba(255,255,255,0.08)",
-                        "text-main": "#0f172a",
-                        "text-muted": "#64748b"
+                        "border-light": "rgba(0,0,0,0.12)",
+                        "border-dark": "rgba(255,255,255,0.12)",
+                        "text-main": "#0f172a", // Slate-900
+                        "text-muted": "#475569"  // Slate-600 for better contrast
                     },
                     fontFamily: {
                         "sans": ["Inter", "sans-serif"],
@@ -42,7 +42,7 @@
         }
         
         .dot-grid {
-            background-image: radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
             background-size: 32px 32px;
         }
         .dark .dot-grid {
@@ -78,7 +78,7 @@
             width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            @apply bg-slate-200 dark:bg-slate-800 rounded-full;
+            @apply bg-slate-300 dark:bg-slate-700 rounded-full;
         }
 
         .hero-glow-text:hover {
