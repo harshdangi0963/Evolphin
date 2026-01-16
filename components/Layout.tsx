@@ -18,7 +18,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="flex h-screen overflow-hidden bg-workspace-bg font-display">
+    <div className="flex h-screen overflow-hidden bg-workspace-bg dark:bg-slate-950 font-display transition-colors duration-500">
       {/* Sidebar */}
       <motion.aside 
         initial={false}
@@ -26,7 +26,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         onMouseEnter={() => setIsCollapsed(false)}
         onMouseLeave={() => setIsCollapsed(true)}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed inset-y-0 left-0 z-50 bg-slate-950 border-r border-border-dark flex flex-col lg:relative lg:translate-x-0 overflow-hidden"
+        className="fixed inset-y-0 left-0 z-50 bg-slate-950 border-r border-white/5 flex flex-col lg:relative lg:translate-x-0 overflow-hidden"
       >
         {/* Logo Section */}
         <div className="flex items-center h-20 px-5 shrink-0 overflow-hidden">
@@ -90,21 +90,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           ))}
           
           <div className="h-px bg-white/5 my-6 mx-2"></div>
-          
-          <button className="w-full flex items-center h-11 px-[10px] rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all group overflow-hidden">
-            <div className="size-9 flex items-center justify-center shrink-0">
-               <span className="material-symbols-outlined text-[22px]">settings</span>
-            </div>
-            {!isCollapsed && (
-              <motion.span 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="ml-3 text-[13px] font-bold whitespace-nowrap"
-              >
-                Settings
-              </motion.span>
-            )}
-          </button>
         </nav>
 
         {/* User Profile */}
@@ -133,12 +118,12 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 h-full relative overflow-y-auto custom-scrollbar">
         {/* Mobile Header */}
-        <div className="lg:hidden h-14 border-b border-border-light flex items-center justify-between px-6 bg-white/80 backdrop-blur-md sticky top-0 z-40">
-           <button onClick={() => setIsMobileOpen(!isMobileOpen)} className="p-2 -ml-2">
+        <div className="lg:hidden h-14 border-b border-border-light dark:border-white/5 flex items-center justify-between px-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 transition-colors">
+           <button onClick={() => setIsMobileOpen(!isMobileOpen)} className="p-2 -ml-2 text-slate-900 dark:text-white">
              <span className="material-symbols-outlined">menu</span>
            </button>
-           <h2 className="text-[11px] font-black uppercase tracking-widest">Nexus KM</h2>
-           <div className="size-8 rounded-full bg-slate-100 border border-slate-200"></div>
+           <h2 className="text-[11px] font-black uppercase tracking-widest dark:text-white">Nexus KM</h2>
+           <div className="size-8 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-white/10"></div>
         </div>
         {children}
       </main>

@@ -7,6 +7,7 @@ import { Document } from '../types';
 import { Particles } from '../components/ui/Particles';
 import { BorderBeam } from '../components/ui/BorderBeam';
 import { FlipClock } from '../components/ui/FlipClock';
+import { AnimatedThemeToggler } from '../components/ui/AnimatedThemeToggler';
 
 interface Source {
   title: string;
@@ -63,7 +64,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           borderColor: isAi ? '#818cf8' : '#e2e8f0',
           scale: isProcessing ? 0.99 : 1
         }}
-        className="relative flex items-center p-1.5 rounded-[22px] bg-white border border-slate-200 shadow-xl ring-4 ring-slate-100/50 transition-all duration-500"
+        className="relative flex items-center p-1.5 rounded-[22px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-xl ring-4 ring-slate-100/50 dark:ring-white/5 transition-all duration-500"
       >
         <BorderBeam 
           size={isAi ? 300 : 220} 
@@ -74,23 +75,23 @@ const SearchInput: React.FC<SearchInputProps> = ({
           className={isAi ? "opacity-80" : "opacity-60"}
         />
         
-        <div className="flex bg-slate-100 rounded-[14px] p-1 shrink-0 w-[164px] relative h-11 items-center">
+        <div className="flex bg-slate-100 dark:bg-slate-800 rounded-[14px] p-1 shrink-0 w-[164px] relative h-11 items-center">
           <motion.div 
             animate={{ x: searchMode === 'Search' ? 0 : 78 }}
             transition={smoothSpring}
-            className="absolute top-1 bottom-1 w-[78px] bg-white rounded-[10px] shadow-sm z-0"
+            className="absolute top-1 bottom-1 w-[78px] bg-white dark:bg-slate-950 rounded-[10px] shadow-sm z-0"
           />
           <button 
             type="button"
             onClick={() => setSearchMode('Search')}
-            className={`relative z-10 flex-1 h-full text-[10px] font-black uppercase tracking-tight transition-colors duration-500 ${searchMode === 'Search' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`relative z-10 flex-1 h-full text-[10px] font-black uppercase tracking-tight transition-colors duration-500 ${searchMode === 'Search' ? 'text-slate-900 dark:text-white' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
           >
             Search
           </button>
           <button 
             type="button"
             onClick={() => setSearchMode('AskAI')}
-            className={`relative z-10 flex-1 h-full text-[10px] font-black uppercase tracking-tight transition-colors duration-500 ${searchMode === 'AskAI' ? 'text-primary' : 'text-slate-400 hover:text-slate-600'}`}
+            className={`relative z-10 flex-1 h-full text-[10px] font-black uppercase tracking-tight transition-colors duration-500 ${searchMode === 'AskAI' ? 'text-primary' : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'}`}
           >
             Ask AI
           </button>
@@ -98,7 +99,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
         <div className="flex-1 flex items-center h-11 ml-1">
           <input 
-            className="flex-1 bg-transparent border-none px-4 text-[14px] font-bold text-slate-900 placeholder:text-slate-300 focus:ring-0 h-full"
+            className="flex-1 bg-transparent border-none px-4 text-[14px] font-bold text-slate-900 dark:text-white placeholder:text-slate-300 dark:placeholder:text-slate-600 focus:ring-0 h-full"
             placeholder={isAi ? "Describe your intent..." : "Find anything in your workspace..."}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -112,8 +113,8 @@ const SearchInput: React.FC<SearchInputProps> = ({
           type="submit"
           className={`h-11 px-6 rounded-[14px] flex items-center gap-2 transition-all disabled:opacity-30 disabled:pointer-events-none group shrink-0 ${
             isAi 
-            ? 'bg-primary shadow-[0_8px_20px_-4px_rgba(99, 102, 241, 0.4)] hover:bg-slate-900' 
-            : 'bg-slate-950 hover:bg-primary shadow-[0_8px_20px_-4px_rgba(0,0,0,0.2)]'
+            ? 'bg-primary shadow-[0_8px_20px_-4px_rgba(99, 102, 241, 0.4)] hover:bg-slate-900 dark:hover:bg-slate-700' 
+            : 'bg-slate-950 dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary shadow-[0_8px_20px_-4px_rgba(0,0,0,0.2)]'
           }`}
           disabled={!query.trim() && !isProcessing}
         >
@@ -236,7 +237,7 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col w-full h-full relative bg-white">
+    <div className="flex-1 flex flex-col w-full h-full relative bg-white dark:bg-slate-950 transition-colors duration-500">
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <Particles 
           className="absolute inset-0 z-0" 
@@ -255,7 +256,7 @@ const Home: React.FC = () => {
             top: isFocusMode ? '0%' : '20%',
             opacity: isFocusMode ? 0.3 : 1
           }}
-          className="absolute left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 blur-[120px] rounded-full"
+          className="absolute left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/5 blur-[120px] rounded-full dark:opacity-20"
         />
       </div>
 
@@ -269,9 +270,9 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="text-center mb-4"
+                className="text-center mb-4 relative"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200/60 text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-8 shadow-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-white/10 text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-8 shadow-sm">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
@@ -279,21 +280,21 @@ const Home: React.FC = () => {
                   Neural Mesh v.4.0 Active
                 </div>
                 
-                <h1 className="text-[56px] lg:text-[86px] font-black tracking-[-0.06em] leading-[0.85] text-slate-950 mb-6 drop-shadow-sm select-none">
-                  Search <span className="text-slate-200/50 transition-all duration-500 hover:text-primary hover:drop-shadow-[0_0_12px_rgba(99,102,241,0.4)] cursor-default">without</span><br/>
+                <h1 className="text-[56px] lg:text-[86px] font-black tracking-[-0.06em] font-display leading-[0.85] text-slate-950 dark:text-white mb-6 drop-shadow-sm select-none">
+                  Search <span className="text-slate-200/50 dark:text-slate-800 transition-all duration-700 hover:text-primary dark:hover:text-white hero-glow-text cursor-default">without</span><br/>
                   <span className="relative inline-block mt-2">
                     boundaries.
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
                       transition={{ delay: 0.8, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute -bottom-1 left-0 h-1.5 bg-primary/5 rounded-full -z-10"
+                      className="absolute -bottom-1 left-0 h-1.5 bg-primary/5 dark:bg-primary/20 rounded-full -z-10"
                     />
                   </span>
                 </h1>
 
-                <p className="text-slate-400 font-bold text-[11px] uppercase tracking-[0.2em] max-w-[320px] mx-auto leading-relaxed mt-4 opacity-80">
-                  Unified intelligence for your memory.
+                <p className="text-slate-400 dark:text-slate-500 font-bold text-[11px] uppercase tracking-[0.2em] max-w-[360px] mx-auto leading-relaxed mt-4 opacity-80">
+                  The centralized neural interface for your collective intelligence.
                 </p>
               </motion.div>
             )}
@@ -317,7 +318,7 @@ const Home: React.FC = () => {
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="flex justify-center mt-6"
             >
-              <div className="flex bg-slate-100/40 backdrop-blur-md p-1 rounded-[16px] border border-slate-200/50 shadow-sm relative overflow-hidden">
+              <div className="flex bg-slate-100/40 dark:bg-slate-900/40 backdrop-blur-md p-1 rounded-[16px] border border-slate-200/50 dark:border-white/10 shadow-sm relative overflow-hidden">
                 {filters.map((f) => (
                   <button
                     key={f.name}
@@ -331,14 +332,14 @@ const Home: React.FC = () => {
                       <motion.div
                         layoutId="filter-active-pill"
                         transition={smoothSpring}
-                        className="absolute inset-0 bg-white shadow-sm border border-slate-200/60 rounded-xl"
+                        className="absolute inset-0 bg-white dark:bg-slate-800 shadow-sm border border-slate-200/60 dark:border-white/10 rounded-xl"
                       />
                     )}
                     
-                    <span className={`material-symbols-outlined text-[16px] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-400 group-hover:text-slate-600'}`}>
+                    <span className={`material-symbols-outlined text-[16px] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
                       {f.icon}
                     </span>
-                    <span className={`text-[9px] font-black uppercase tracking-[0.15em] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-slate-900' : 'text-slate-400 group-hover:text-slate-600'}`}>
+                    <span className={`text-[9px] font-black uppercase tracking-[0.15em] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-slate-900 dark:text-white' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300'}`}>
                       {f.name}
                     </span>
                   </button>
@@ -358,17 +359,17 @@ const Home: React.FC = () => {
               >
                 <div className={`max-w-[85%] md:max-w-[75%] lg:max-w-[65%] ${
                   msg.role === 'user' 
-                  ? 'bg-slate-900 text-white p-4 rounded-[20px] rounded-tr-none shadow-lg' 
+                  ? 'bg-slate-900 dark:bg-primary/20 dark:border dark:border-primary/20 text-white p-4 rounded-[20px] rounded-tr-none shadow-lg' 
                   : 'flex gap-3'
                 }`}>
                   {msg.role === 'assistant' ? (
                     <>
-                      <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/10 shrink-0 self-start">
-                         <span className="material-symbols-outlined text-primary text-base font-bold">auto_awesome</span>
+                      <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/10 shrink-0 self-start text-primary">
+                         <span className="material-symbols-outlined text-base font-bold">auto_awesome</span>
                       </div>
                       <div className="space-y-3 flex-1">
-                        <div className="p-4 bg-white border border-slate-100 rounded-[20px] rounded-tl-none shadow-sm">
-                          <p className="text-[13px] font-bold leading-relaxed text-slate-700">{msg.text}</p>
+                        <div className="p-4 bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 rounded-[20px] rounded-tl-none shadow-sm text-slate-700 dark:text-slate-300">
+                          <p className="text-[13px] font-bold leading-relaxed">{msg.text}</p>
                         </div>
                         {msg.sources && (
                           <div className="flex flex-wrap gap-2 pt-0.5">
@@ -377,7 +378,7 @@ const Home: React.FC = () => {
                                 whileHover={{ scale: 1.02 }}
                                 key={idx} 
                                 onClick={() => navigate('/documents/d1')}
-                                className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-[9px] font-black uppercase tracking-tight text-slate-900 shadow-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-all"
+                                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 text-[9px] font-black uppercase tracking-tight text-slate-900 dark:text-white shadow-sm flex items-center gap-2 cursor-pointer hover:border-primary transition-all"
                               >
                                 <span className="material-symbols-outlined text-[14px] text-primary">description</span>
                                 {s.title}
@@ -412,25 +413,25 @@ const Home: React.FC = () => {
                      }}
                      key={doc.id} 
                      onClick={() => navigate(`/documents/${doc.id}`)}
-                     className="p-4 rounded-xl bg-white border border-slate-100 hover:border-primary/40 hover:shadow-md transition-all cursor-pointer group flex items-center gap-3"
+                     className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-white/5 hover:border-primary/40 hover:shadow-md transition-all cursor-pointer group flex items-center gap-3"
                    >
-                      <div className="size-10 rounded-lg bg-slate-50 flex items-center justify-center group-hover:bg-primary/5 transition-colors border border-slate-100">
+                      <div className="size-10 rounded-lg bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary/5 transition-colors border border-slate-100 dark:border-white/5">
                         <span className="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors text-xl">
                           {doc.type === 'PDF' ? 'picture_as_pdf' : doc.type === 'SQL' ? 'database' : 'description'}
                         </span>
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-[13px] font-black text-slate-900 uppercase tracking-tight leading-none group-hover:text-primary transition-colors">{doc.name}</h4>
+                        <h4 className="text-[13px] font-black text-slate-900 dark:text-white uppercase tracking-tight leading-none group-hover:text-primary transition-colors">{doc.name}</h4>
                         <div className="flex items-center gap-2 mt-1.5">
-                           <span className="px-1 py-0.5 rounded bg-slate-100 text-[7px] font-black text-slate-500 uppercase tracking-widest">{doc.type}</span>
-                           <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{doc.lastUpdated}</span>
+                           <span className="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[7px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">{doc.type}</span>
+                           <span className="text-[9px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest">{doc.lastUpdated}</span>
                         </div>
                       </div>
-                      <span className="material-symbols-outlined text-slate-300 group-hover:text-primary transition-all text-sm">arrow_forward_ios</span>
+                      <span className="material-symbols-outlined text-slate-300 dark:text-slate-700 group-hover:text-primary transition-all text-sm">arrow_forward_ios</span>
                    </motion.div>
                  )) : (
                    <div className="text-center py-12">
-                     <span className="material-symbols-outlined text-3xl text-slate-200 mb-2">search_off</span>
+                     <span className="material-symbols-outlined text-3xl text-slate-200 dark:text-slate-800 mb-2">search_off</span>
                      <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">No matches</p>
                    </div>
                  )}
@@ -439,13 +440,13 @@ const Home: React.FC = () => {
 
             {isProcessing && (
               <div className="flex justify-center py-8">
-                <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-3 text-primary">
                   <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
                     className="size-6 rounded-full border-2 border-primary border-t-transparent"
                   />
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-primary animate-pulse">Scanning Mesh</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] animate-pulse">Scanning Mesh</span>
                 </div>
               </div>
             )}
@@ -460,7 +461,7 @@ const Home: React.FC = () => {
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white via-white/90 to-transparent z-50 pointer-events-none"
+            className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-white dark:from-slate-950 via-white/90 dark:via-slate-950/90 to-transparent z-50 pointer-events-none"
           >
             <div className="pointer-events-auto">
                <SearchInput 
@@ -477,15 +478,14 @@ const Home: React.FC = () => {
         )}
       </AnimatePresence>
 
+      {/* Persistent Neural Status Bar - Now restricted to Home Screen */}
       <motion.div 
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ 
-          opacity: isFocusMode ? 0.2 : 0.8, 
-          y: 0 
-        }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: isFocusMode ? 0.3 : 0.8, y: 0 }}
         whileHover={{ opacity: 1 }}
-        className="fixed bottom-6 right-8 z-[60] pointer-events-none"
+        className="fixed bottom-6 right-8 z-[100] flex items-center gap-4 group transition-opacity"
       >
+        <AnimatedThemeToggler />
         <FlipClock time={currentTime} />
       </motion.div>
     </div>

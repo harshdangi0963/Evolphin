@@ -10,9 +10,9 @@ interface FlipUnitProps {
 const FlipUnit: React.FC<FlipUnitProps> = ({ value, label }) => {
   return (
     <div className="flex flex-col items-center gap-1">
-      <div className="relative h-8 w-10 bg-slate-50/40 backdrop-blur-md rounded-lg overflow-hidden border border-slate-200/50 shadow-sm flex items-center justify-center">
+      <div className="relative h-8 w-10 bg-slate-50/40 dark:bg-slate-900 backdrop-blur-md rounded-lg overflow-hidden border border-slate-200/50 dark:border-primary/30 shadow-sm flex items-center justify-center">
         {/* Subtle internal depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-white/40 dark:from-white/5 to-transparent pointer-events-none"></div>
         
         {/* Silky Sliding Numbers */}
         <div className="relative h-5 w-full flex justify-center items-center overflow-hidden">
@@ -26,14 +26,14 @@ const FlipUnit: React.FC<FlipUnitProps> = ({ value, label }) => {
                 duration: 0.6,
                 ease: [0.32, 0.72, 0, 1] // Smooth exponential ease-out
               }}
-              className="text-[13px] font-black text-slate-600 font-mono tracking-tighter"
+              className="text-[13px] font-black text-slate-600 dark:text-white font-mono tracking-tighter"
             >
               {value}
             </motion.span>
           </AnimatePresence>
         </div>
       </div>
-      <span className="text-[6px] font-black text-slate-400 uppercase tracking-[0.25em]">{label}</span>
+      <span className="text-[6px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.25em]">{label}</span>
     </div>
   );
 };
@@ -47,11 +47,11 @@ export const FlipClock: React.FC<{ time: string }> = ({ time }) => {
     <div className="flex items-start gap-1.5 select-none scale-90 origin-bottom-right">
       <FlipUnit value={parts[0]} label="HRS" />
       <div className="pt-3">
-        <span className="text-slate-300 font-black text-[10px]">:</span>
+        <span className="text-slate-300 dark:text-primary/40 font-black text-[10px]">:</span>
       </div>
       <FlipUnit value={parts[1]} label="MIN" />
       <div className="pt-3">
-        <span className="text-slate-300 font-black text-[10px]">:</span>
+        <span className="text-slate-300 dark:text-primary/40 font-black text-[10px]">:</span>
       </div>
       <FlipUnit value={parts[2]} label="SEC" />
     </div>
