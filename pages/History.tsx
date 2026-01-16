@@ -12,7 +12,7 @@ const History: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col bg-white dark:bg-slate-950 transition-colors duration-500 h-full relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 dot-grid hero-mask opacity-30 dark:opacity-10" />
+        <div className="absolute inset-0 hero-mask opacity-30 dark:opacity-10" />
       </div>
 
       <header className="px-8 py-5 border-b border-slate-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl sticky top-0 z-40 gap-4">
@@ -88,7 +88,7 @@ const History: React.FC = () => {
                  <div className="flex items-center justify-between">
                    <div className="flex items-center gap-2">
                      <span className="material-symbols-outlined text-[14px] text-slate-400 group-hover:text-primary transition-colors">schedule</span>
-                     <p className="text-[10px] font-black text-slate-900 dark:text-slate-300 uppercase tracking-tight">{i * 2}h ago</p>
+                     <p className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-tight">{i * 2}h ago</p>
                    </div>
                  </div>
                  <div className="flex items-center gap-2 mt-0.5">

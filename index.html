@@ -16,16 +16,16 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#4f46e5", // Slightly deeper indigo for better contrast
+                        "primary": "#4f46e5",
                         "accent-ai": "#9333ea",
-                        "workspace-bg": "#f8fafc", // Slate-50 canvas
-                        "surface": "#ffffff",      // Pure white cards
+                        "workspace-bg": "#f8fafc",
+                        "surface": "#ffffff",
                         "sidebar-bg": "#020617",
-                        "text-main": "#0f172a",    // Slate-900
-                        "text-muted": "#334155",   // Slate-700 for high-contrast secondary text
-                        "text-ghost": "#64748b",   // Slate-500 for captions only
-                        "border-hard": "#cbd5e1",  // Slate-300
-                        "border-subtle": "#e2e8f0" // Slate-200
+                        "text-main": "#0f172a",
+                        "text-muted": "#334155",
+                        "text-ghost": "#64748b",
+                        "border-hard": "#cbd5e1",
+                        "border-subtle": "#e2e8f0"
                     },
                     fontFamily: {
                         "sans": ["Inter", "sans-serif"],
@@ -41,18 +41,44 @@
                 @apply font-sans antialiased bg-workspace-bg text-text-main dark:bg-slate-950 dark:text-slate-100 transition-colors duration-500;
             }
         }
-        
-        .dot-grid {
-            background-image: radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px);
-            background-size: 32px 32px;
-        }
-        .dark .dot-grid {
-            background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+
+        .fine-dotted-mesh {
+            background-image: radial-gradient(circle, currentColor 1.25px, transparent 1.25px);
+            background-size: 24px 24px;
         }
 
         .hero-mask {
             mask-image: radial-gradient(circle at 50% 40%, black 20%, transparent 80%);
             -webkit-mask-image: radial-gradient(circle at 50% 40%, black 20%, transparent 80%);
+        }
+
+        .text-shimmer {
+            background: linear-gradient(
+                90deg,
+                theme('colors.slate.950') 0%,
+                theme('colors.slate.400') 50%,
+                theme('colors.slate.950') 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 8s linear infinite;
+        }
+
+        .dark .text-shimmer {
+            background: linear-gradient(
+                90deg,
+                theme('colors.white') 0%,
+                theme('colors.slate.400') 50%,
+                theme('colors.white') 100%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
         }
 
         .material-symbols-outlined {

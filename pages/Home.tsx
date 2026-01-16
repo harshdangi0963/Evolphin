@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MOCK_DOCS } from '../constants';
 import { Document } from '../types';
-import { Particles } from '../components/ui/Particles';
 import { BorderBeam } from '../components/ui/BorderBeam';
 import { FlipClock } from '../components/ui/FlipClock';
 import { AnimatedThemeToggler } from '../components/ui/AnimatedThemeToggler';
@@ -42,9 +41,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
   const smoothSpring = {
     type: 'spring',
-    stiffness: 200,
-    damping: 25,
-    mass: 0.8
+    stiffness: 260,
+    damping: 30,
+    mass: 1
   };
 
   const isAi = searchMode === 'AskAI';
@@ -59,47 +58,47 @@ const SearchInput: React.FC<SearchInputProps> = ({
         onSubmit={handleSearchSubmit}
         animate={{
           boxShadow: isAi 
-            ? '0 30px 60px -12px rgba(79, 70, 229, 0.3), 0 0 30px -10px rgba(79, 70, 229, 0.4)'
-            : '0 30px 60px -12px rgba(0,0,0,0.15), 0 0 20px -5px rgba(0,0,0,0.1)',
-          borderColor: isAi ? '#4f46e5' : '#94a3b8', 
-          scale: isProcessing ? 0.99 : 1
+            ? '0 40px 80px -15px rgba(79, 70, 229, 0.25), 0 0 40px -10px rgba(79, 70, 229, 0.3)'
+            : '0 40px 80px -15px rgba(0,0,0,0.12), 0 0 30px -10px rgba(0,0,0,0.08)',
+          borderColor: isAi ? '#4f46e5' : '#cbd5e1', 
+          scale: isProcessing ? 0.995 : 1
         }}
-        className="relative flex items-center p-1.5 rounded-[22px] bg-white dark:bg-slate-900 border border-slate-400/40 dark:border-white/10 shadow-2xl ring-8 ring-slate-200/50 dark:ring-white/5 transition-all duration-500"
+        className="relative flex items-center p-2 rounded-[28px] bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 shadow-2xl transition-all duration-500"
       >
         <BorderBeam 
-          size={isAi ? 300 : 220} 
-          duration={isAi ? 6 : 10} 
-          colorFrom={isAi ? "#4f46e5" : "#64748b"} 
-          borderRadius={22}
-          borderWidth={isAi ? 2.5 : 1.5}
-          className={isAi ? "opacity-100" : "opacity-60"}
+          size={isAi ? 400 : 280} 
+          duration={isAi ? 8 : 12} 
+          colorFrom={isAi ? "#4f46e5" : "#94a3b8"} 
+          borderRadius={28}
+          borderWidth={isAi ? 2 : 1}
+          className={isAi ? "opacity-100" : "opacity-40"}
         />
         
-        <div className="flex bg-slate-100 dark:bg-slate-800 rounded-[14px] p-1 shrink-0 w-[164px] relative h-11 items-center border border-slate-200 dark:border-white/5">
+        <div className="flex bg-slate-100 dark:bg-slate-800/80 rounded-[20px] p-1.5 shrink-0 w-[180px] relative h-14 items-center border border-slate-200 dark:border-white/5">
           <motion.div 
-            animate={{ x: searchMode === 'Search' ? 0 : 78 }}
+            animate={{ x: searchMode === 'Search' ? 0 : 84 }}
             transition={smoothSpring}
-            className="absolute top-0.5 bottom-0.5 w-[78px] bg-white dark:bg-slate-950 rounded-[10px] shadow-md z-0 border border-slate-200 dark:border-white/10"
+            className="absolute top-1.5 bottom-1.5 w-[84px] bg-white dark:bg-slate-950 rounded-[14px] shadow-sm z-0 border border-slate-200 dark:border-white/10"
           />
           <button 
             type="button"
             onClick={() => setSearchMode('Search')}
-            className={`relative z-10 flex-1 h-full text-[10px] font-black uppercase tracking-tight transition-colors duration-500 ${searchMode === 'Search' ? 'text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'}`}
+            className={`relative z-10 flex-1 h-full text-[11px] font-bold uppercase tracking-widest transition-colors duration-500 ${searchMode === 'Search' ? 'text-slate-900 dark:text-white' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'}`}
           >
             Search
           </button>
           <button 
             type="button"
             onClick={() => setSearchMode('AskAI')}
-            className={`relative z-10 flex-1 h-full text-[10px] font-black uppercase tracking-tight transition-colors duration-500 ${searchMode === 'AskAI' ? 'text-primary' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'}`}
+            className={`relative z-10 flex-1 h-full text-[11px] font-bold uppercase tracking-widest transition-colors duration-500 ${searchMode === 'AskAI' ? 'text-primary' : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-200'}`}
           >
             Ask AI
           </button>
         </div>
 
-        <div className="flex-1 flex items-center h-11 ml-1">
+        <div className="flex-1 flex items-center h-14 ml-2">
           <input 
-            className="flex-1 bg-transparent border-none px-4 text-[14px] font-bold text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-0 h-full"
+            className="flex-1 bg-transparent border-none px-4 text-[16px] font-medium text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:ring-0 h-full"
             placeholder={isAi ? "Describe your intent..." : "Find anything in your workspace..."}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -108,26 +107,26 @@ const SearchInput: React.FC<SearchInputProps> = ({
         </div>
 
         <motion.button 
-          whileTap={{ scale: 0.97 }}
-          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.01 }}
           type="submit"
-          className={`h-11 px-6 rounded-[14px] flex items-center gap-2 transition-all disabled:opacity-30 disabled:pointer-events-none group shrink-0 ${
+          className={`h-14 px-8 rounded-[20px] flex items-center gap-3 transition-all disabled:opacity-30 disabled:pointer-events-none group shrink-0 ${
             isAi 
-            ? 'bg-primary shadow-lg hover:bg-slate-900 dark:hover:bg-slate-700' 
-            : 'bg-slate-900 dark:bg-slate-700 hover:bg-primary dark:hover:bg-primary shadow-md'
+            ? 'bg-primary shadow-xl hover:bg-slate-950 dark:hover:bg-slate-700' 
+            : 'bg-slate-900 dark:bg-slate-800 hover:bg-primary dark:hover:bg-primary shadow-lg'
           }`}
           disabled={!query.trim() && !isProcessing}
         >
-          <span className="text-white text-[10px] font-black uppercase tracking-[0.15em]">
-            {isProcessing ? 'Thinking' : (searchMode === 'Search' ? 'Search' : 'Ask AI')}
+          <span className="text-white text-[11px] font-bold uppercase tracking-[0.2em]">
+            {isProcessing ? 'Processing' : (searchMode === 'Search' ? 'Execute' : 'Synthesize')}
           </span>
           {!isProcessing && (
             <motion.span 
               animate={isAi ? { rotate: [0, 15, -15, 0] } : {}}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="material-symbols-outlined text-[18px] text-white/70 group-hover:text-white transition-colors"
+              transition={{ repeat: Infinity, duration: 2.5 }}
+              className="material-symbols-outlined text-[20px] text-white/80 group-hover:text-white transition-colors"
             >
-              {searchMode === 'Search' ? 'arrow_forward' : 'auto_awesome'}
+              {searchMode === 'Search' ? 'bolt' : 'auto_awesome'}
             </motion.span>
           )}
         </motion.button>
@@ -211,17 +210,16 @@ const Home: React.FC = () => {
   const isFocusMode = isConversationActive || isSearchActive || isProcessing;
 
   const filters = [
-    { name: 'All', icon: 'apps' },
+    { name: 'All', icon: 'grid_view' },
     { name: 'PDF', icon: 'picture_as_pdf' },
-    { name: 'DOCX', icon: 'description' },
+    { name: 'DOCX', icon: 'article' },
     { name: 'SQL', icon: 'database' }
   ];
 
-  const smoothSpring = {
+  const filterSpring = {
     type: 'spring',
-    stiffness: 200,
-    damping: 25,
-    mass: 0.8
+    stiffness: 300,
+    damping: 35
   };
 
   const handleSetSearchMode = (mode: 'Search' | 'AskAI') => {
@@ -233,51 +231,64 @@ const Home: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col w-full h-full relative bg-workspace-bg dark:bg-slate-950 transition-colors duration-500">
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <Particles 
-          className="absolute inset-0 z-0" 
-          quantity={100} 
-          staticity={30} 
-          ease={70} 
-          color="#4f46e5"
-          size={0.6}
-        />
         <motion.div 
           animate={{ opacity: isFocusMode ? 0.2 : 0.6 }}
-          className="absolute inset-0 dot-grid hero-mask"
+          className="absolute inset-0 fine-dotted-mesh text-slate-400 dark:text-slate-600 hero-mask"
+        />
+        
+        <motion.div 
+          animate={{ opacity: isFocusMode ? 0.15 : 0.5 }}
+          className="absolute inset-0 hero-mask"
         />
         <motion.div 
           animate={{ 
-            top: isFocusMode ? '0%' : '20%',
-            opacity: isFocusMode ? 0.3 : 1
+            top: isFocusMode ? '0%' : '15%',
+            opacity: isFocusMode ? 0.2 : 0.8
           }}
-          className="absolute left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-primary/10 blur-[120px] rounded-full dark:opacity-20"
+          className="absolute left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-primary/5 blur-[140px] rounded-full dark:opacity-10"
         />
       </div>
 
       <div className="flex-1 flex flex-col w-full max-w-5xl mx-auto relative z-10 px-6">
-        <div className={`flex-1 flex flex-col transition-all duration-500 ${isConversationActive ? 'pt-6' : 'pt-16'}`}>
+        <div className={`flex-1 flex flex-col transition-all duration-700 ${isConversationActive ? 'pt-8' : 'pt-24'}`}>
           <AnimatePresence mode="wait">
             {!isFocusMode && (
               <motion.div 
                 key="hero-section"
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10, scale: 0.98 }}
-                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="text-center mb-16 relative"
+                exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                className="text-center mb-20 relative"
               >
-                <h1 className="text-[56px] lg:text-[92px] font-black tracking-[-0.06em] font-display leading-[0.82] text-slate-950 dark:text-white drop-shadow-xl select-none">
-                  Search <span className="text-slate-400 dark:text-slate-800 transition-all duration-700 hover:text-primary dark:hover:text-white hero-glow-text cursor-default">without</span><br/>
-                  <span className="relative inline-block mt-2">
-                    boundaries.
+                {/* Hero Headline Refinement */}
+                <h1 className="text-[64px] lg:text-[104px] font-extrabold tracking-[-0.04em] font-display leading-[0.85] select-none">
+                  <span className="text-shimmer">Search </span>
+                  <span className="relative inline-block group cursor-default">
+                    <span className="text-slate-300 dark:text-slate-800 transition-all duration-700 group-hover:text-primary group-hover:blur-0 blur-[2px] dark:group-hover:text-white">without</span>
                     <motion.div 
-                      initial={{ width: 0 }}
-                      animate={{ width: '100%' }}
-                      transition={{ delay: 0.8, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                      className="absolute -bottom-1 left-0 h-2 bg-primary/10 dark:bg-primary/20 rounded-full -z-10"
+                      className="absolute -bottom-1 left-0 right-0 h-1 bg-primary/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      layoutId="hover-glow"
                     />
                   </span>
+                  <br/>
+                  <span className="text-shimmer relative inline-block mt-3">
+                    boundaries
+                    <span className="text-primary">.</span>
+                  </span>
                 </h1>
+                
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 1 }}
+                  className="mt-10 flex flex-col items-center"
+                >
+                  <p className="text-[12px] font-bold text-slate-500 dark:text-slate-500 uppercase tracking-[0.5em] max-w-lg mx-auto leading-relaxed">
+                    Intelligence Mesh <span className="text-slate-300 dark:text-slate-800">/</span> v4.0.22
+                  </p>
+                  <div className="h-8 w-px bg-gradient-to-b from-primary/40 to-transparent mt-6" />
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -297,10 +308,10 @@ const Home: React.FC = () => {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="flex justify-center mt-8"
+              transition={{ delay: 0.2, duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              className="flex justify-center mt-10"
             >
-              <div className="flex bg-white dark:bg-slate-900/60 backdrop-blur-md p-1 rounded-[16px] border border-slate-300 dark:border-white/10 shadow-lg relative overflow-hidden">
+              <div className="flex bg-white/40 dark:bg-slate-900/40 backdrop-blur-xl p-1 rounded-[18px] border border-slate-200 dark:border-white/5 shadow-sm relative overflow-hidden scale-95">
                 {filters.map((f) => (
                   <button
                     key={f.name}
@@ -308,20 +319,20 @@ const Home: React.FC = () => {
                       setActiveFilter(f.name);
                       if (query) performDocSearch();
                     }}
-                    className={`relative px-5 py-2.5 rounded-xl flex items-center gap-2 transition-all group z-10`}
+                    className={`relative px-4 py-2 rounded-[14px] flex items-center gap-2 transition-all group z-10`}
                   >
                     {activeFilter === f.name && (
                       <motion.div
                         layoutId="filter-active-pill"
-                        transition={smoothSpring}
-                        className="absolute inset-0 bg-slate-900 dark:bg-slate-800 shadow-md border border-slate-950 dark:border-white/10 rounded-xl"
+                        transition={filterSpring}
+                        className="absolute inset-0 bg-primary/10 dark:bg-primary/20 shadow-[0_0_0_1px_rgba(79,70,229,0.2)] rounded-[14px]"
                       />
                     )}
                     
-                    <span className={`material-symbols-outlined text-[18px] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-500 group-hover:text-slate-900 dark:group-hover:text-slate-300'}`}>
+                    <span className={`material-symbols-outlined text-[18px] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200'}`}>
                       {f.icon}
                     </span>
-                    <span className={`text-[10px] font-black uppercase tracking-[0.15em] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-white' : 'text-slate-700 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-200'}`}>
+                    <span className={`text-[10px] font-bold uppercase tracking-[0.15em] relative z-20 transition-all duration-500 ${activeFilter === f.name ? 'text-primary' : 'text-slate-500 dark:text-slate-500 group-hover:text-slate-900 dark:group-hover:text-slate-200'}`}>
                       {f.name}
                     </span>
                   </button>
@@ -330,39 +341,39 @@ const Home: React.FC = () => {
             </motion.div>
           )}
 
-          <div className={`mt-10 space-y-5 overflow-y-auto custom-scrollbar flex-1 px-2 ${isConversationActive ? 'pb-36' : 'pb-12'}`}>
+          <div className={`mt-12 space-y-6 overflow-y-auto custom-scrollbar flex-1 px-2 ${isConversationActive ? 'pb-36' : 'pb-16'}`}>
             {searchMode === 'AskAI' && chatHistory.map((msg, i) => (
               <motion.div 
                 key={msg.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05, duration: 0.6 }}
+                transition={{ delay: i * 0.05, duration: 0.8 }}
                 className={`flex w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div className={`max-w-[85%] md:max-w-[75%] lg:max-w-[65%] ${
                   msg.role === 'user' 
-                  ? 'bg-slate-900 dark:bg-primary/20 dark:border dark:border-primary/20 text-white p-5 rounded-[24px] rounded-tr-none shadow-xl border border-slate-950' 
-                  : 'flex gap-4'
+                  ? 'bg-slate-900 dark:bg-primary/20 dark:border dark:border-primary/20 text-white p-6 rounded-[28px] rounded-tr-none shadow-xl border border-slate-950' 
+                  : 'flex gap-5'
                 }`}>
                   {msg.role === 'assistant' ? (
                     <>
-                      <div className="size-10 rounded-xl bg-primary text-white flex items-center justify-center border border-primary/20 shrink-0 self-start shadow-md">
-                         <span className="material-symbols-outlined text-xl font-bold">auto_awesome</span>
+                      <div className="size-11 rounded-2xl bg-primary text-white flex items-center justify-center border border-primary/20 shrink-0 self-start shadow-xl">
+                         <span className="material-symbols-outlined text-2xl font-bold">auto_awesome</span>
                       </div>
                       <div className="space-y-4 flex-1">
-                        <div className="p-6 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[24px] rounded-tl-none shadow-md text-slate-800 dark:text-slate-200">
-                          <p className="text-[14px] font-bold leading-relaxed">{msg.text}</p>
+                        <div className="p-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 rounded-[28px] rounded-tl-none shadow-sm text-slate-800 dark:text-slate-200">
+                          <p className="text-[15px] font-medium leading-relaxed">{msg.text}</p>
                         </div>
                         {msg.sources && (
-                          <div className="flex flex-wrap gap-2.5 pt-0.5">
+                          <div className="flex flex-wrap gap-3 pt-1">
                             {msg.sources.map((s, idx) => (
                               <motion.div 
-                                whileHover={{ scale: 1.02 }}
+                                whileHover={{ scale: 1.02, y: -2 }}
                                 key={idx} 
                                 onClick={() => navigate('/documents/d1')}
-                                className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 text-[10px] font-black uppercase tracking-tight text-slate-950 dark:text-white shadow-sm flex items-center gap-2 cursor-pointer hover:border-primary hover:text-primary transition-all"
+                                className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/10 text-[10px] font-bold uppercase tracking-widest text-slate-950 dark:text-white shadow-sm flex items-center gap-2.5 cursor-pointer hover:border-primary hover:text-primary transition-all"
                               >
-                                <span className="material-symbols-outlined text-[16px] text-primary">description</span>
+                                <span className="material-symbols-outlined text-[18px] text-primary">description</span>
                                 {s.title}
                               </motion.div>
                             ))}
@@ -371,7 +382,7 @@ const Home: React.FC = () => {
                       </div>
                     </>
                   ) : (
-                    <p className="text-[14px] font-bold tracking-tight">{msg.text}</p>
+                    <p className="text-[15px] font-medium tracking-tight leading-relaxed">{msg.text}</p>
                   )}
                 </div>
               </motion.div>
@@ -383,52 +394,52 @@ const Home: React.FC = () => {
                 animate="visible"
                 variants={{
                   hidden: { opacity: 0 },
-                  visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
+                  visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
                 }}
-                className="grid grid-cols-1 gap-3.5 max-w-3xl mx-auto w-full"
+                className="grid grid-cols-1 gap-4 max-w-3xl mx-auto w-full"
               >
                  {docResults.length > 0 ? docResults.map(doc => (
                    <motion.div 
                      variants={{
-                       hidden: { opacity: 0, x: -5 },
+                       hidden: { opacity: 0, x: -10 },
                        visible: { opacity: 1, x: 0 }
                      }}
                      key={doc.id} 
                      onClick={() => navigate(`/documents/${doc.id}`)}
-                     className="p-5 rounded-[22px] bg-white dark:bg-slate-900 border border-slate-300 dark:border-white/5 hover:border-primary hover:shadow-xl transition-all cursor-pointer group flex items-center gap-4 shadow-sm"
+                     className="p-6 rounded-[24px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 hover:border-primary/40 hover:shadow-2xl transition-all duration-500 cursor-pointer group flex items-center gap-5 shadow-sm"
                    >
-                      <div className="size-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary transition-colors border border-slate-200 dark:border-white/5">
-                        <span className="material-symbols-outlined text-slate-600 group-hover:text-white transition-colors text-2xl">
-                          {doc.type === 'PDF' ? 'picture_as_pdf' : doc.type === 'SQL' ? 'database' : 'description'}
+                      <div className="size-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-primary transition-all duration-500 border border-slate-100 dark:border-white/5">
+                        <span className="material-symbols-outlined text-slate-500 group-hover:text-white transition-colors text-3xl">
+                          {doc.type === 'PDF' ? 'picture_as_pdf' : doc.type === 'SQL' ? 'database' : 'article'}
                         </span>
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-[14px] font-black text-slate-950 dark:text-white uppercase tracking-tight leading-none group-hover:text-primary transition-colors">{doc.name}</h4>
-                        <div className="flex items-center gap-3 mt-2">
-                           <span className="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-[8px] font-black text-slate-800 dark:text-slate-400 uppercase tracking-widest border border-slate-300 dark:border-white/5">{doc.type}</span>
-                           <span className="text-[10px] font-black text-slate-600 dark:text-slate-500 uppercase tracking-widest">{doc.lastUpdated}</span>
+                        <h4 className="text-[15px] font-bold text-slate-950 dark:text-white uppercase tracking-tight leading-none group-hover:text-primary transition-colors">{doc.name}</h4>
+                        <div className="flex items-center gap-4 mt-2.5">
+                           <span className="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-[9px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-widest border border-slate-200 dark:border-white/10">{doc.type}</span>
+                           <span className="text-[11px] font-bold text-slate-400 dark:text-slate-600 uppercase tracking-widest">{doc.lastUpdated}</span>
                         </div>
                       </div>
-                      <span className="material-symbols-outlined text-slate-400 dark:text-slate-700 group-hover:text-primary group-hover:translate-x-1 transition-all text-sm">arrow_forward_ios</span>
+                      <span className="material-symbols-outlined text-slate-300 dark:text-slate-700 group-hover:text-primary group-hover:translate-x-1.5 transition-all text-sm">arrow_forward_ios</span>
                    </motion.div>
                  )) : (
-                   <div className="text-center py-20">
-                     <span className="material-symbols-outlined text-5xl text-slate-300 dark:text-slate-800 mb-4">search_off</span>
-                     <p className="text-slate-600 font-black uppercase tracking-[0.25em] text-[12px]">No records found in current mesh</p>
+                   <div className="text-center py-24">
+                     <span className="material-symbols-outlined text-6xl text-slate-200 dark:text-slate-800 mb-6">search_off</span>
+                     <p className="text-slate-500 font-bold uppercase tracking-[0.3em] text-[13px]">Null result at current mesh node</p>
                    </div>
                  )}
               </motion.div>
             )}
 
             {isProcessing && (
-              <div className="flex justify-center py-10">
-                <div className="flex flex-col items-center gap-4 text-primary">
+              <div className="flex justify-center py-12">
+                <div className="flex flex-col items-center gap-5 text-primary">
                   <motion.div 
                     animate={{ rotate: 360 }}
-                    transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
-                    className="size-8 rounded-full border-[3px] border-primary border-t-transparent shadow-lg"
+                    transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                    className="size-10 rounded-full border-[3.5px] border-primary border-t-transparent shadow-lg shadow-primary/10"
                   />
-                  <span className="text-[10px] font-black uppercase tracking-[0.25em] animate-pulse">Scanning Neural Mesh</span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.3em] animate-pulse">Syncing Neural Context</span>
                 </div>
               </div>
             )}
@@ -440,9 +451,9 @@ const Home: React.FC = () => {
       <AnimatePresence>
         {isConversationActive && (
           <motion.div
-            initial={{ y: 80, opacity: 0 }}
+            initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 80, opacity: 0 }}
+            exit={{ y: 100, opacity: 0 }}
             className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-workspace-bg dark:from-slate-950 via-workspace-bg/95 dark:via-slate-950/95 to-transparent z-50 pointer-events-none"
           >
             <div className="pointer-events-auto">
@@ -464,7 +475,7 @@ const Home: React.FC = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: isFocusMode ? 0.3 : 0.9, y: 0 }}
         whileHover={{ opacity: 1 }}
-        className="fixed bottom-8 right-8 z-[100] flex items-center gap-5 group transition-opacity"
+        className="fixed bottom-8 right-8 z-[100] flex items-center gap-6 group transition-opacity"
       >
         <AnimatedThemeToggler />
         <FlipClock time={currentTime} />

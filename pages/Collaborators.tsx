@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MOCK_MEMBERS } from '../constants';
 import { Member } from '../types';
-import { Particles } from '../components/ui/Particles';
 
 const Collaborators: React.FC = () => {
   const [selectedMember, setSelectedMember] = useState<Member | null>(null);
@@ -32,15 +31,7 @@ const Collaborators: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col h-full bg-white dark:bg-slate-950 transition-colors duration-500 relative overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-        <Particles 
-          className="absolute inset-0 z-0 opacity-40" 
-          quantity={80} 
-          staticity={40} 
-          ease={70} 
-          color="#6366f1"
-          size={0.6}
-        />
-        <div className="absolute inset-0 dot-grid hero-mask opacity-30 dark:opacity-10" />
+        <div className="absolute inset-0 hero-mask opacity-30 dark:opacity-10" />
       </div>
 
       <header className="px-8 py-5 border-b border-slate-100 dark:border-white/5 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/60 dark:bg-slate-950/60 backdrop-blur-xl sticky top-0 z-40 gap-4">
