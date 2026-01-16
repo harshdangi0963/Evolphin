@@ -66,7 +66,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   const suggestions = isAi ? aiSuggestions : searchSuggestions;
 
-  // Handle Typing
   useEffect(() => {
     const handleType = () => {
       const i = loopNum % suggestions.length;
@@ -74,21 +73,19 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
       if (isDeleting) {
         setDisplayText(prev => prev.substring(0, prev.length - 1));
-        setTypingSpeed(35); // Faster deleting
+        setTypingSpeed(35); 
       } else {
         setDisplayText(fullText.substring(0, displayText.length + 1));
-        // Add random jitter for human feel (60ms - 120ms)
         setTypingSpeed(60 + Math.random() * 60);
       }
 
-      // Transition Logic
       if (!isDeleting && displayText === fullText) {
-        setTypingSpeed(2000); // Wait at the end of phrase
+        setTypingSpeed(2000); 
         setIsDeleting(true);
       } else if (isDeleting && displayText === '') {
         setIsDeleting(false);
         setLoopNum(prev => prev + 1);
-        setTypingSpeed(500); // Brief pause before next phrase
+        setTypingSpeed(500); 
       }
     };
 
@@ -96,7 +93,6 @@ const SearchInput: React.FC<SearchInputProps> = ({
     return () => clearTimeout(timer);
   }, [displayText, isDeleting, loopNum, suggestions, typingSpeed]);
 
-  // Cursor Blinking Logic (only blinks when not typing)
   useEffect(() => {
     const blinkInterval = setInterval(() => {
       setShowCursor(prev => !prev);
@@ -113,13 +109,13 @@ const SearchInput: React.FC<SearchInputProps> = ({
 
   return (
     <motion.div 
-      layout
+      layout="position"
       layoutId="search-console-container"
       transition={springConfig}
       className={`w-full max-w-4xl px-6 mx-auto ${stickyBottom ? 'absolute bottom-8 inset-x-0 z-50' : 'relative mt-2'}`}
     >
       <motion.form 
-        layout
+        layout="position"
         layoutId="search-console-form"
         onSubmit={handleSearchSubmit}
         animate={{
@@ -304,11 +300,10 @@ const Home: React.FC = () => {
       </div>
 
       <div className="flex-1 flex flex-col w-full max-w-5xl mx-auto relative z-10 px-6 overflow-hidden">
-        <motion.div 
-          layout
-          className={`flex-1 flex flex-col relative ${isConversationActive ? 'pt-8' : 'pt-24'}`}
+        <div 
+          className={`flex-1 flex flex-col relative transition-all duration-700 ${isConversationActive ? 'pt-8' : 'pt-24'}`}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="wait" initial={false}>
             {!isFocusMode && (
               <motion.div 
                 key="hero-section"
@@ -359,7 +354,6 @@ const Home: React.FC = () => {
 
           {searchMode === 'Search' && !isConversationActive && (
             <motion.div 
-              layout
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -523,7 +517,7 @@ const Home: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
 
       <motion.div 
