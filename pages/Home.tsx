@@ -270,17 +270,9 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="text-center mb-4 relative"
+                className="text-center mb-12 relative"
               >
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300/60 dark:border-white/10 text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-8 shadow-sm">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
-                  </span>
-                  Neural Mesh v.4.0 Active
-                </div>
-                
-                <h1 className="text-[56px] lg:text-[86px] font-black tracking-[-0.06em] font-display leading-[0.85] text-slate-950 dark:text-white mb-6 drop-shadow-sm select-none">
+                <h1 className="text-[56px] lg:text-[86px] font-black tracking-[-0.06em] font-display leading-[0.85] text-slate-950 dark:text-white drop-shadow-sm select-none">
                   Search <span className="text-slate-300 dark:text-slate-800 transition-all duration-700 hover:text-primary dark:hover:text-white hero-glow-text cursor-default">without</span><br/>
                   <span className="relative inline-block mt-2">
                     boundaries.
@@ -292,10 +284,6 @@ const Home: React.FC = () => {
                     />
                   </span>
                 </h1>
-
-                <p className="text-slate-600 dark:text-slate-300 font-bold text-[11px] uppercase tracking-[0.2em] max-w-[360px] mx-auto leading-relaxed mt-4 opacity-100">
-                  The centralized neural interface for your collective intelligence.
-                </p>
               </motion.div>
             )}
           </AnimatePresence>
