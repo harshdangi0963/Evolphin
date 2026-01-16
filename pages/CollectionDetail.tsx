@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { MOCK_COLLECTIONS, MOCK_DOCS, MOCK_ACTIVITIES } from '../constants';
 
 const CollectionDetail: React.FC = () => {
@@ -55,14 +56,18 @@ const CollectionDetail: React.FC = () => {
               </div>
               
               <div className="flex items-center gap-3">
-                <button className="px-6 h-12 bg-white border border-border-light rounded-2xl text-text-main text-sm font-bold shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2 group">
+                <button className="px-6 h-12 bg-white border border-border-light rounded-2xl text-text-main text-[11px] font-black uppercase tracking-widest shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2 group">
                   <span className="material-symbols-outlined text-[20px] text-slate-400 group-hover:text-primary transition-colors">share</span>
                   Share
                 </button>
-                <button className="px-6 h-12 bg-primary rounded-2xl text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary-light transition-all flex items-center gap-2">
+                <motion.button 
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-6 py-3 bg-slate-950 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-slate-200 flex items-center gap-3 hover:bg-primary transition-all"
+                >
                   <span className="material-symbols-outlined text-[20px]">add</span>
                   Add Document
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>

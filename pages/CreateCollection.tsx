@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const CreateCollection: React.FC = () => {
   const navigate = useNavigate();
@@ -8,20 +9,24 @@ const CreateCollection: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col bg-slate-50 min-h-full">
-      <header className="h-16 flex items-center justify-between px-8 sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-border-light">
-        <nav className="flex items-center gap-2 text-sm font-medium">
+      <header className="h-20 flex items-center justify-between px-8 sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-border-light">
+        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest">
           <button onClick={() => navigate('/collections')} className="text-text-muted hover:text-text-main">Collections</button>
-          <span className="material-symbols-outlined text-text-muted text-sm">chevron_right</span>
+          <span className="material-symbols-outlined text-text-muted text-[16px]">chevron_right</span>
           <span className="text-text-main">New Collection</span>
         </nav>
         <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="h-9 px-4 text-sm font-semibold text-text-main bg-white border border-border-light rounded-lg hover:bg-slate-50 transition-colors shadow-sm">
+          <button onClick={() => navigate(-1)} className="h-10 px-6 text-[10px] font-black uppercase tracking-widest text-text-main bg-white border border-border-light rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
             Discard
           </button>
-          <button className="h-9 px-4 bg-primary text-white rounded-lg text-sm font-semibold hover:bg-slate-800 transition-all shadow-sm flex items-center gap-2">
-            <span className="material-symbols-outlined text-sm">add</span>
+          <motion.button 
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-6 py-3 bg-slate-950 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-slate-200 flex items-center gap-3 hover:bg-primary transition-all"
+          >
+            <span className="material-symbols-outlined text-lg">add_circle</span>
             Create Collection
-          </button>
+          </motion.button>
         </div>
       </header>
 

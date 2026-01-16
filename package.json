@@ -12,6 +12,7 @@
     "react-router-dom": "^7.12.0",
     "react-dom": "^19.2.3",
     "react": "^19.2.3",
+    "framer-motion": "11.18.2",
     "@google/genai": "^1.36.0"
   },
   "devDependencies": {
