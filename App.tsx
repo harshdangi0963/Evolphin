@@ -8,7 +8,6 @@ import CollectionDetail from './pages/CollectionDetail';
 import DocumentReader from './pages/DocumentReader';
 import History from './pages/History';
 import Collaborators from './pages/Collaborators';
-import CreateCollection from './pages/CreateCollection';
 
 const App: React.FC = () => {
   return (
@@ -18,7 +17,6 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route path="/collections" element={<Collections />} />
           <Route path="/collections/:id" element={<CollectionDetail />} />
-          <Route path="/collections/new" element={<CreateCollection />} />
           <Route path="/documents/:id" element={<DocumentReader />} />
           <Route path="/history" element={<History />} />
           <Route path="/collaborators" element={<Collaborators />} />

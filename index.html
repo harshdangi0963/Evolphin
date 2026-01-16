@@ -6,7 +6,6 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Nexus KM | Knowledge Workspace</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <!-- Standard Material Symbols Outlined font -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Inter:wght@300..700&display=swap" rel="stylesheet"/>
     <script>
@@ -17,14 +16,16 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#6366f1",
-                        "accent-ai": "#a855f7",
-                        "workspace-bg": "#ffffff",
+                        "primary": "#4f46e5", // Slightly deeper indigo for better contrast
+                        "accent-ai": "#9333ea",
+                        "workspace-bg": "#f8fafc", // Slate-50 canvas
+                        "surface": "#ffffff",      // Pure white cards
                         "sidebar-bg": "#020617",
-                        "border-light": "rgba(0,0,0,0.12)",
-                        "border-dark": "rgba(255,255,255,0.12)",
-                        "text-main": "#0f172a", // Slate-900
-                        "text-muted": "#475569"  // Slate-600 for better contrast
+                        "text-main": "#0f172a",    // Slate-900
+                        "text-muted": "#334155",   // Slate-700 for high-contrast secondary text
+                        "text-ghost": "#64748b",   // Slate-500 for captions only
+                        "border-hard": "#cbd5e1",  // Slate-300
+                        "border-subtle": "#e2e8f0" // Slate-200
                     },
                     fontFamily: {
                         "sans": ["Inter", "sans-serif"],
@@ -37,12 +38,12 @@
     <style type="text/tailwindcss">
         @layer base {
             body {
-                @apply font-sans antialiased bg-workspace-bg text-text-main dark:bg-slate-950 dark:text-slate-50 transition-colors duration-500;
+                @apply font-sans antialiased bg-workspace-bg text-text-main dark:bg-slate-950 dark:text-slate-100 transition-colors duration-500;
             }
         }
         
         .dot-grid {
-            background-image: radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-image: radial-gradient(rgba(0,0,0,0.15) 1px, transparent 1px);
             background-size: 32px 32px;
         }
         .dark .dot-grid {
@@ -54,7 +55,6 @@
             -webkit-mask-image: radial-gradient(circle at 50% 40%, black 20%, transparent 80%);
         }
 
-        /* Essential for rendering icons correctly */
         .material-symbols-outlined {
             font-family: 'Material Symbols Outlined' !important;
             font-weight: normal;
@@ -71,31 +71,25 @@
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
             font-feature-settings: 'liga';
-            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
         
         .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+            width: 5px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+            @apply bg-slate-400 dark:bg-slate-700 rounded-full;
         }
 
-        .hero-glow-text:hover {
-            text-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
-        }
-        .dark .hero-glow-text:hover {
-            text-shadow: 0 0 35px rgba(255, 255, 255, 0.5), 0 0 15px rgba(99, 102, 241, 0.4);
+        .surface-card {
+            @apply bg-surface dark:bg-slate-900 border border-border-subtle dark:border-white/5 shadow-sm;
         }
 
-        /* Fixed View Transition Animation Styles for 2-way toggle */
         ::view-transition-old(root),
         ::view-transition-new(root) {
             animation: none;
             mix-blend-mode: normal;
         }
-
-        /* Ensure the new snapshot is always on top so the expansion is visible */
         ::view-transition-new(root) {
             z-index: 9999;
         }
