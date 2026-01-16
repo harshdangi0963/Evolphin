@@ -269,19 +269,30 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="text-center mb-6"
+                className="text-center mb-4"
               >
-                <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-primary/5 border border-primary/10 text-[9px] font-black text-primary uppercase tracking-widest mb-6">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200/60 text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-8 shadow-sm">
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary"></span>
                   </span>
                   Neural Mesh v.4.0 Active
                 </div>
-                <h1 className="text-[52px] lg:text-[72px] font-black tracking-[-0.05em] leading-[0.85] text-slate-950 mb-6">
-                  Search <span className="text-slate-200">without</span><br/>boundaries.
+                
+                <h1 className="text-[56px] lg:text-[86px] font-black tracking-[-0.06em] leading-[0.85] text-slate-950 mb-6 drop-shadow-sm select-none">
+                  Search <span className="text-slate-200/50 transition-all duration-500 hover:text-primary hover:drop-shadow-[0_0_12px_rgba(99,102,241,0.4)] cursor-default">without</span><br/>
+                  <span className="relative inline-block mt-2">
+                    boundaries.
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: '100%' }}
+                      transition={{ delay: 0.8, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                      className="absolute -bottom-1 left-0 h-1.5 bg-primary/5 rounded-full -z-10"
+                    />
+                  </span>
                 </h1>
-                <p className="text-slate-400 font-bold text-xs max-w-[280px] mx-auto leading-relaxed">
+
+                <p className="text-slate-400 font-bold text-[11px] uppercase tracking-[0.2em] max-w-[320px] mx-auto leading-relaxed mt-4 opacity-80">
                   Unified intelligence for your memory.
                 </p>
               </motion.div>
